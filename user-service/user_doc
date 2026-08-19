@@ -1,0 +1,28 @@
+ POST ( create ):--  http://localhost:8085/api/user/create
+
+ {
+   "firstName": "Binita",
+   "lastName": "Singh",
+   "username": "Binita22",
+   "email": "Binita@gmail.com",
+   "password": "Binita@123",
+   "phone": "787654323",
+   "dob": "1998-05-15",
+   "role": "PATIENT",
+   "address": "Bangalore, Karnataka, India"
+ }
+
+GET ( getbyId ) : -- http://localhost:8085/api/user/getUser/1
+GET ( getAll ) : -- http://localhost:8085/api/user/getAll
+
+DELETE (DELTE USER) : http://localhost:8085/api/user/delete/3
+
+
+PATCH (partialUpdata) : -  http://localhost:8085/api/user/partialUpdate/4
+{
+  "firstName": "osijfosjow"
+}
+
+PUT (update user Status ) : - http://localhost:8085/api/user/update/3/status?status=INACTIVE
+
+GET (getbyrole) :- http://localhost:8085/api/user/role/{role}

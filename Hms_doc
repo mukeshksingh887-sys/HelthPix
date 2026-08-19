@@ -1,0 +1,347 @@
+api get all possible setup for hospital management system
+
+If you are building a complete Hospital Management System (HMS) using Spring Boot Microservices, these are the APIs and services typically required.
+
+1. User Service
+----------------------
+Handles authentication and user management.
+
+APIs
+Create User
+Update User
+Delete User
+Get User By ID
+Get All Users
+Search User
+Assign Role
+Change Password
+Reset Password
+Activate/Deactivate User
+Login
+Logout
+Refresh Token
+Roles
+ADMIN
+DOCTOR
+PATIENT
+NURSE
+RECEPTIONIST
+LAB_TECHNICIAN
+PHARMACIST
+ACCOUNTANT
+----------------------------------
+2. Patient Service
+------------------------------------
+APIs
+Register Patient
+Update Patient
+Delete Patient
+Get Patient By ID
+Get All Patients
+Search Patient
+Get Medical History
+Add Emergency Contact
+Upload Documents
+Patient Dashboard
+
+Patient data is the foundation of HMS.
+
+3. Doctor Service
+-----------------------------------
+APIs
+Add Doctor
+Update Doctor
+Delete Doctor
+Get Doctor By ID
+Get All Doctors
+Search Doctor
+Doctor Availability
+Doctor Schedule
+Doctor Leave Management
+Doctor Profile
+
+4. Appointment Service
+-----------------------------------
+APIs
+Book Appointment
+Cancel Appointment
+Reschedule Appointment
+Get Appointment By ID
+Get Patient Appointments
+Get Doctor Appointments
+Appointment Status
+Queue Management
+Token Generation
+
+Appointment and queue management are core HMS modules.
+
+5. OPD Service
+----------------------------------
+APIs
+Create OPD Visit
+Get OPD Visit
+Update OPD Visit
+Consultation Notes
+Diagnosis
+Prescription
+Follow-up Visit
+Close Visit
+6. IPD Service (Admission)
+--------------------------------------
+APIs
+Admit Patient
+Transfer Patient
+Discharge Patient
+Get Admission Details
+Bed Allocation
+Ward Transfer
+Discharge Summary
+
+Admission, discharge, and transfer workflows are standard HMS capabilities.
+
+7. Bed Management Service
+--------------------------------
+APIs
+Add Bed
+Update Bed
+Delete Bed
+Get Available Beds
+Assign Bed
+Release Bed
+Ward Occupancy Report
+8. Electronic Medical Record (EMR)
+APIs
+----------------------
+Create Medical Record
+Update Medical Record
+Get Medical Record
+Add Diagnosis
+Add Clinical Notes
+Add Allergies
+Add Treatment Plan
+Patient History
+
+EMR/EHR is one of the core modules in modern HMS systems.
+
+9. Prescription Service
+APIs
+-------------------------
+Create Prescription
+Update Prescription
+Get Prescription
+Medicine Suggestions
+Drug Interaction Check
+Print Prescription
+10. Pharmacy Service
+APIs
+Add Medicine
+Update Medicine
+Delete Medicine
+Medicine Stock
+Medicine Purchase
+Medicine Sale
+Expiry Alert
+Inventory Report
+Generate Pharmacy Bill
+
+Pharmacy and inventory management are standard HMS modules.
+
+11. Laboratory Service (LIS)
+------------------------------
+APIs
+Create Lab Test
+Book Lab Test
+Sample Collection
+Upload Results
+Download Report
+Get Lab History
+Lab Dashboard
+
+Laboratory Information Systems (LIS) are standard HMS components.
+
+12. Radiology Service
+=-------------------------
+APIs
+Create Radiology Test
+Schedule Scan
+Upload Scan Report
+Download Report
+Get Scan History
+
+Radiology/RIS integration is a common hospital module.
+
+13. Billing Service
+APIs
+-----------------------------
+Create Invoice
+Update Invoice
+Generate Bill
+Process Payment
+Refund Payment
+Get Bill By ID
+Payment History
+Outstanding Bills
+
+Billing is a core hospital workflow.
+
+14. Insurance Service
+-----------------------
+APIs
+Create Claim
+Approve Claim
+Reject Claim
+Claim Status
+Insurance Verification
+TPA Management
+15. Nurse Service
+APIs
+Nursing Notes
+Patient Vitals
+Medication Administration
+Shift Management
+Ward Rounds
+16. Operation Theatre (OT) Service
+----------------------------------
+APIs
+Schedule Surgery
+Surgery Details
+OT Booking
+Surgeon Assignment
+Operation Notes
+Post Operation Report
+
+OT management is a common HMS module.
+
+17. Blood Bank Service
+--------------------------------
+APIs
+Add Donor
+Blood Inventory
+Blood Request
+Blood Issue
+Blood Availability
+
+Blood bank functionality is often integrated into HMIS platforms.
+
+18. Inventory Service
+-----------------------------
+APIs
+Add Item
+Update Item
+Delete Item
+Purchase Order
+Vendor Management
+Stock Management
+Low Stock Alert
+19. HR Service
+APIs
+Add Employee
+Update Employee
+Employee Attendance
+Leave Management
+Payroll
+Department Management
+20. Notification Service
+APIs
+Send Email
+Send SMS
+Send WhatsApp
+Appointment Reminder
+Prescription Reminder
+Payment Reminder
+21. Report Service
+APIs
+Patient Report
+Revenue Report
+Appointment Report
+Doctor Performance Report
+Bed Occupancy Report
+Pharmacy Report
+Lab Report
+
+Analytics and reporting are standard HMS requirements.
+
+22. Audit Service
+APIs
+Audit Logs
+User Activity Logs
+Security Logs
+Login History
+
+Role-based access and audit trails are commonly included in modern HMIS platforms.
+
+Recommended Microservices Architecture
+API Gateway
+      |
+----------------------------------------------------
+|      |      |      |      |      |      |         |
+User  Patient Doctor Appointment Billing Pharmacy Lab
+      |
+----------------------------------------------------
+|       |       |       |       |       |          |
+IPD    OPD    EMR    Nurse   OT    Insurance  Reports
+Kafka Events
+
+Use Kafka for:
+
+PATIENT_CREATED
+PATIENT_UPDATED
+
+
+USER_CREATED
+USER_UPDATED
+
+
+APPOINTMENT_BOOKED
+APPOINTMENT_CANCELLED
+
+
+PATIENT_ADMITTED
+PATIENT_DISCHARGED
+
+
+LAB_TEST_ORDERED
+LAB_REPORT_GENERATED
+
+
+PRESCRIPTION_CREATED
+
+
+MEDICINE_SOLD
+
+
+PAYMENT_COMPLETED
+
+
+NOTIFICATION_SENT
+Database Per Service
+user_db
+patient_db
+doctor_db
+appointment_db
+billing_db
+pharmacy_db
+lab_db
+radiology_db
+inventory_db
+insurance_db
+report_db
+
+For a production-grade HMS, a good Phase 1 implementation is:
+
+User Service
+Patient Service
+Doctor Service
+Appointment Service
+OPD Service
+IPD Service
+EMR Service
+Billing Service
+Pharmacy Service
+Lab Service
+API Gateway
+Eureka Server
+Kafka
+Config Server
+
+This setup is enough to run a real hospital workflow from patient registration → appointment → consultation → prescription → lab test → billing → discharge.

@@ -8,6 +8,7 @@
           <option value="admin-server" />
           <option value="Patient_service" />
           <option value="user_service" />
+          <option value="doctor-service" />
         </list>
       </option>
       <option name="ignoredPackages">
@@ -15,10 +16,12 @@
           <option value="org.apache.httpcomponents:httpclient:4.5.3" />
           <option value="org.apache.httpcomponents:httpclient:4.5.3" />
           <option value="org.apache.httpcomponents:httpclient:4.5.3" />
+          <option value="org.apache.httpcomponents:httpclient:4.5.3" />
         </list>
       </option>
       <option name="ignoredReasons">
         <list>
+          <option value="Not exploitable" />
           <option value="Not exploitable" />
           <option value="Not exploitable" />
           <option value="Not exploitable" />

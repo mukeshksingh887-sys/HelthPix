@@ -1,5 +1,7 @@
 package com.user_service.service;
 
+import com.user_service.client.AuthFeignClient;
+import com.user_service.dto.AuthUserRequest;
 import com.user_service.dto.UserRequest;
 import com.user_service.dto.UserResponse;
 import com.user_service.entity.User;
@@ -8,6 +10,7 @@ import com.user_service.entity.Enm.UserType;
 import com.user_service.mapper.UserMapper;
 import com.user_service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +24,12 @@ public class UserServiceImp implements  UserService {
     private UserRepository userRepository;
     @Autowired
     private UserMapper mapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    AuthFeignClient authFeignClient;
+
+
 
     @Override
     public UserResponse createUser(UserRequest request) {
@@ -43,7 +52,6 @@ public class UserServiceImp implements  UserService {
         user.setLastName(request.getLastName());
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
         user.setPhone(request.getPhone());
         user.setDob(request.getDob());
         user.setRole(request.getRole());
@@ -53,6 +61,27 @@ public class UserServiceImp implements  UserService {
         User savedUser = userRepository.save(user);
 
 //        return mapToResponse(savedUser);
+
+        AuthUserRequest authRequest = AuthUserRequest.builder()
+                .userId(savedUser.getId())
+                .email(savedUser.getEmail())
+//                .password(passwordEncoder.encode(request.getPassword()))
+                .password(request.getPassword())
+                .role(savedUser.getRole())
+                .build();
+
+
+
+//        AuthUserRequest authRequest = new AuthUserRequest();
+//        authRequest.setUserId(savedUser.getId());
+//        authRequest.setEmail(savedUser.getEmail());
+//        authRequest.setPassword( request.getPassword());
+//        authRequest.setRole(savedUser.getRole());
+
+        authFeignClient.createAuthUser(authRequest);
+
+        System.out.println(authRequest);
+
         return mapper.toResponse(savedUser);
     }
 
@@ -76,6 +105,7 @@ public class UserServiceImp implements  UserService {
                 .map(user -> mapper.toResponse(user))
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public UserResponse updateUser(Long id,
@@ -105,7 +135,6 @@ public class UserServiceImp implements  UserService {
         user.setLastName(request.getLastName());
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
         user.setPhone(request.getPhone());
         user.setDob(request.getDob());
         user.setRole(request.getRole());
@@ -153,7 +182,9 @@ public class UserServiceImp implements  UserService {
                 .orElseThrow(() ->
                         new RuntimeException("User not found"));
 
+        authFeignClient.deleteAuthUser(id);
         userRepository.delete(user);
+
     }
 
     @Override

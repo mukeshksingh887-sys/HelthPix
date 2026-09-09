@@ -2,6 +2,7 @@ package com.user_service.controller;
 
 import com.user_service.dto.UserRequest;
 import com.user_service.dto.UserResponse;
+import com.user_service.entity.Enm.UserStatus;
 import com.user_service.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -44,7 +45,7 @@ public class UserController{
             @PathVariable Long id) {
 
         return ResponseEntity.ok(
-                userService.getUser(id)
+                userService.getUserById(id)
         );
     }
 
@@ -92,10 +93,10 @@ public class UserController{
     }
 
     // Update Status
-    @PutMapping("update/{id}/status")
+    @PutMapping("/update/{id}/status/{status}")
     public ResponseEntity<UserResponse> updateStatus(
             @PathVariable Long id,
-            @RequestParam String status) {
+            @PathVariable UserStatus status) {
 
         return ResponseEntity.ok(
                 userService.updateStatus(id, status)
@@ -145,7 +146,7 @@ public class UserController{
 
     // Activate User
     @PutMapping("/{id}/activate")
-    public ResponseEntity<UserResponse> activateUser(
+    public ResponseEntity<UserResponse> changeToActivateUser(
             @PathVariable Long id) {
 
         return ResponseEntity.ok(
@@ -155,7 +156,7 @@ public class UserController{
 
     // Deactivate User
     @PutMapping("/{id}/deactivate")
-    public ResponseEntity<UserResponse> deactivateUser(
+    public ResponseEntity<UserResponse> changeToDeactivateUser(
             @PathVariable Long id) {
 
         return ResponseEntity.ok(

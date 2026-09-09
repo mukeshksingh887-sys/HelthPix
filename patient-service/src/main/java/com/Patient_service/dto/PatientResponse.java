@@ -1,5 +1,6 @@
 package com.Patient_service.dto;
 
+import jakarta.persistence.Column;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ public class PatientResponse {
 
     private Long id;
     private String patientCode;
+    private Long userId;
     private String firstName;
     private String lastName;
     private String email;

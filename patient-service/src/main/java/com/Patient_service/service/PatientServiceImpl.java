@@ -1,17 +1,23 @@
 package com.Patient_service.service;
 
+import com.Patient_service.client.UserServiceClient;
 import com.Patient_service.dto.PatientRequest;
 import com.Patient_service.dto.PatientResponse;
+import com.Patient_service.dto.UserResponse;
 import com.Patient_service.entity.Patient;
+import com.Patient_service.entity.UserType;
 import com.Patient_service.exception.PatientNotFoundException;
+import com.Patient_service.exception.UserNotFounException;
 import com.Patient_service.repository.PatientRepository;
-import com.Patient_service.util.Gender;
-import com.Patient_service.util.PatientStatus;
+import com.Patient_service.entity.Gender;
+import com.Patient_service.entity.PatientStatus;
 import com.Patient_service.util.Util;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,31 +25,24 @@ import java.util.UUID;
 
 @Service
 
+@Slf4j
 public class PatientServiceImpl implements PatientService{
-
-
-//    private Long id;
-//    private String firstName;
-//    private String lastName;
-//    private String email;
-//    private String phone;
-//    private LocalDate dateOfBirth;
-//    private String gender;
-//    private String bloodGroup;
-//    private String address;
-//    private String emergencyContact;
-//    private String status;
-//
-
 
     @Autowired
     private PatientRepository patientRepository;
 
     @Autowired
     private Util util;
+
+
+    @Autowired
+     private UserServiceClient userServiceClient;
+
     @Override
     @Transactional
     public PatientResponse createPatient(PatientRequest request) {
+
+        log.info("user request data :  {}",request);
         if (patientRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException(
                     "Patient already exists with email : " + request.getEmail()
@@ -56,21 +55,37 @@ public class PatientServiceImpl implements PatientService{
             );
         }
 
+        UserResponse user ;
+
+        try{
+            user = userServiceClient.getUserById(request.getUserId());
+            log.info(" user info : => {}",user);
+        }catch (Exception ex){
+            throw new UserNotFounException("user not found on the user service ");
+        }
+
+
+        if (UserType.valueOf(user.getRole()) != UserType.PATIENT) {
+            throw new UserNotFounException(
+                    "User is not registered as PATIENT");
+        }
+
 
         Patient patient = new Patient();
 
         patient.setPatientCode(generatePatientCode());
-        patient.setFirstName(request.getFirstName());
-        patient.setLastName(request.getLastName());
-        patient.setEmail(request.getEmail());
-        patient.setPhone(request.getPhone());
-        patient.setDateOfBirth(request.getDateOfBirth());
-        patient.setGender(Gender.valueOf(request.getGender()));
-        patient.setBloodGroup(request.getBloodGroup());
-        patient.setAddress(request.getAddress());
-        patient.setEmergencyContact(request.getEmergencyContact());
+        patient.setUserId(user.getId());
+//          .userId(user.getId())
+        patient.setFirstName(user.getFirstName());
+        patient.setLastName(user.getLastName());
+        patient.setEmail(user.getEmail());
+        patient.setPhone(user.getPhone());
+        patient.setDateOfBirth(LocalDate.parse(user.getDob()));
+        patient.setGender(Gender.valueOf(user.getGender()));
+        patient.setBloodGroup(user.getBloodGroup());
+        patient.setAddress(user.getAddress());
+        patient.setEmergencyContact("+91-0000000000");
         patient.setStatus(PatientStatus.valueOf(String.valueOf(PatientStatus.ACTIVE)));
-        patient.setStatus(PatientStatus.valueOf(request.getStatus()));
         patient.setCreatedAt(LocalDateTime.now());
         patient.setUpdatedAt(LocalDateTime.now());
 
@@ -321,6 +336,21 @@ public class PatientServiceImpl implements PatientService{
                 .map(patient -> util.mapToResponse(patient))
                 .toList();
     }
+
+    @Override
+    public PatientResponse getPatientByEmail(String email) {
+        Patient patient = patientRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new PatientNotFoundException(
+                                "Patient not found this Email : " + email
+                        ));
+
+        return util.mapToResponse(patient);
+    }
+
+
+
+
 
     private String generatePatientCode() {
 

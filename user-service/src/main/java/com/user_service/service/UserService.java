@@ -17,7 +17,7 @@ public interface UserService {
 
     UserResponse createUser(UserRequest request);
 
-    UserResponse getUser(Long id);
+    UserResponse getUserById(Long id);
 
     List<UserResponse> getAllUsers();
 
@@ -27,7 +27,7 @@ public interface UserService {
 
     void deleteUser(Long id);
 
-    UserResponse updateStatus(Long id, String status);
+    UserResponse updateStatus(Long id, UserStatus status);
 
     UserResponse getByEmail(String email);
 

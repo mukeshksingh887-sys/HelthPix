@@ -7,8 +7,12 @@ import com.user_service.dto.UserResponse;
 import com.user_service.entity.User;
 import com.user_service.entity.Enm.UserStatus;
 import com.user_service.entity.Enm.UserType;
+import com.user_service.exception.*;
 import com.user_service.mapper.UserMapper;
 import com.user_service.repository.UserRepository;
+import feign.FeignException;
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +22,7 @@ import java.util.stream.Collectors;
 
 
 @Service
+@Slf4j
 public class UserServiceImp implements  UserService {
 
     @Autowired
@@ -26,24 +31,26 @@ public class UserServiceImp implements  UserService {
     private UserMapper mapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Autowired
-    AuthFeignClient authFeignClient;
+    private AuthFeignClient authFeignClient;
 
 
 
     @Override
+//    @Transactional
     public UserResponse createUser(UserRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw new UserAlreadyExistsException("Email already exists");
         }
 
         if (userRepository.existsByPhone(request.getPhone())) {
-            throw new RuntimeException("Phone already exists");
+            throw new UserAlreadyExistsException("Phone already exists");
         }
 
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("Username already exists");
+            throw new UserAlreadyExistsException("Username already exists");
         }
 
         User user = new User();
@@ -54,43 +61,45 @@ public class UserServiceImp implements  UserService {
         user.setEmail(request.getEmail());
         user.setPhone(request.getPhone());
         user.setDob(request.getDob());
+        user.setGender(request.getGender());
+        user.setBloodGroup(request.getBloodGroup());
         user.setRole(request.getRole());
         user.setStatus(UserStatus.ACTIVE);
         user.setAddress(request.getAddress());
 
         User savedUser = userRepository.save(user);
 
-//        return mapToResponse(savedUser);
 
         AuthUserRequest authRequest = AuthUserRequest.builder()
                 .userId(savedUser.getId())
                 .email(savedUser.getEmail())
-//                .password(passwordEncoder.encode(request.getPassword()))
                 .password(request.getPassword())
                 .role(savedUser.getRole())
                 .build();
 
+        try {
+            authFeignClient.createAuthUser(authRequest);
+//            log.info(" sent to the auth service : {}", authRequest.getEmail());
+        } catch (FeignException ex) {
+            userRepository.deleteById(savedUser.getId());
+//            throw new UserCreationException("Failed to create user in auth service");
+            log.error("Auth Service Response : {}", ex.contentUTF8());
 
-
-//        AuthUserRequest authRequest = new AuthUserRequest();
-//        authRequest.setUserId(savedUser.getId());
-//        authRequest.setEmail(savedUser.getEmail());
-//        authRequest.setPassword( request.getPassword());
-//        authRequest.setRole(savedUser.getRole());
-
-        authFeignClient.createAuthUser(authRequest);
-
-        System.out.println(authRequest);
+            throw new UserCreationException(
+                    ex.contentUTF8());
+        }
 
         return mapper.toResponse(savedUser);
     }
 
+
+
     @Override
-    public UserResponse getUser(Long id) {
+    public UserResponse getUserById(Long id) {
 
         User user = userRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("User not found"));
+                        new UserNotFoundException("User not found"));
 
 //        return mapToResponse(user);
         return mapper.toResponse(user);
@@ -104,6 +113,32 @@ public class UserServiceImp implements  UserService {
                 .stream()
                 .map(user -> mapper.toResponse(user))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() ->
+                        new UserNotFoundException("User not found"));
+
+//        authFeignClient.deleteAuthUser(id);
+//        userRepository.delete(user);
+
+
+        try {
+
+            authFeignClient.deleteAuthUser(id);
+
+            userRepository.delete(user);
+
+        } catch ( Exception ex) {
+          log.error(" user deletion faild : {}", ex.getMessage());
+            throw new UserDeleteException(
+                    "Failed to delete user completely");
+        }
+
+
     }
 
 
@@ -175,29 +210,32 @@ public class UserServiceImp implements  UserService {
         return mapper.toResponse(updatedUser);
     }
 
-    @Override
-    public void deleteUser(Long id) {
-
-        User user = userRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("User not found"));
-
-        authFeignClient.deleteAuthUser(id);
-        userRepository.delete(user);
-
-    }
 
     @Override
     public UserResponse updateStatus(Long id,
-                                     String status) {
+                                     UserStatus status) {
 
         User user = userRepository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("User not found"));
 
-        user.setStatus(UserStatus.valueOf(status.toUpperCase()));
+//        user.setStatus(UserStatus.valueOf(status.toUpperCase()));
+     log.info(" user status :   {}",user.getStatus());
 
-//        return mapToResponse(userRepository.save(user));
+        try {
+
+//            UserStatus userStatus =
+//                    UserStatus.valueOf(status.toUpperCase());
+            user.setStatus(status);
+
+//            User updatedUser = userRepository.save(user);
+
+        } catch (IllegalArgumentException ex) {
+
+            throw new BadRequestException(
+                    "Invalid status. Allowed values: ACTIVE, INACTIVE, BLOCKED");
+        }
+
         return mapper.toResponse(userRepository.save(user));
     }
 
@@ -220,7 +258,7 @@ public class UserServiceImp implements  UserService {
                 .orElseThrow(() ->
                         new RuntimeException("User not found"));
 
-//        return mapToResponse(user);
+
         return mapper.toResponse(user);
     }
 

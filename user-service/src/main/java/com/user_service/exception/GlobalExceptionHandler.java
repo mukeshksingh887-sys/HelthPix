@@ -117,4 +117,39 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.SERVICE_UNAVAILABLE)
                 .body(response);
     }
+
+
+    @ExceptionHandler(UserCreationException.class)
+    public ResponseEntity<?> creationFaild(
+            UserCreationException  ex) {
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(error(
+                        404,
+                        ex.getMessage()
+                ));
+    }
+
+
+
+    @ExceptionHandler(UserDeleteException.class)
+    public ResponseEntity<?> creationFaild(
+            UserDeleteException ex) {
+
+        return ResponseEntity.badRequest()
+                .body(ex.getMessage());
+    }
+
+
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<String> handleBadRequest(
+            BadRequestException ex) {
+
+        return ResponseEntity.badRequest()
+                .body(ex.getMessage());
+    }
+
+
 }

@@ -21,4 +21,6 @@ public class DoctorResponse {
     private String department;
     private String licenseNumber;
     private DoctorStatus status;
+
+    private UserResponse user;
 }

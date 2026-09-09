@@ -1,7 +1,5 @@
 package com.Patient_service.entity;
 
-import com.Patient_service.util.Gender;
-import com.Patient_service.util.PatientStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,6 +19,9 @@ public class Patient {
 
     @Column(unique = true, nullable = false)
     private String patientCode;
+
+    @Column(nullable = false)
+    private Long userId;
 
     @Column(nullable = false)
     private String firstName;

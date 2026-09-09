@@ -1,6 +1,7 @@
 package com.user_service.entity;
 
 
+import com.user_service.entity.Enm.Gender;
 import com.user_service.entity.Enm.UserStatus;
 import com.user_service.entity.Enm.UserType;
 import jakarta.persistence.*;
@@ -40,6 +41,11 @@ public class User {
     private  String dob;
 
     @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+   private String bloodGroup;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserType role;
 
@@ -65,3 +71,4 @@ public class User {
         updatedAt = LocalDateTime.now();
     }
 }
+

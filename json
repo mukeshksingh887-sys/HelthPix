@@ -1,0 +1,112 @@
+[
+  {
+    "firstName": "Rahul",
+    "lastName": "Sharma",
+    "username": "rahul.sharma",
+    "email": "rahul.sharma@gmail.com",
+    "password": "Rahul@123",
+    "dob": "1990-05-15",
+    "phone": "9876543210",
+    "address": "MG Road, Bengaluru, Karnataka",
+    "role": "DOCTOR"
+  },
+  {
+    "firstName": "Priya",
+    "lastName": "Patel",
+    "username": "priya.patel",
+    "email": "priya.patel@gmail.com",
+    "password": "Priya@123",
+    "dob": "1995-08-22",
+    "phone": "9876543211",
+    "address": "Whitefield, Bengaluru, Karnataka",
+    "role": "PATIENT"
+  },
+  {
+    "firstName": "Arjun",
+    "lastName": "Reddy",
+    "username": "arjun.reddy",
+    "email": "arjun.reddy@gmail.com",
+    "password": "Arjun@123",
+    "dob": "1988-02-10",
+    "phone": "9876543212",
+    "address": "HSR Layout, Bengaluru, Karnataka",
+    "role": "DOCTOR"
+  },
+  {
+    "firstName": "Sneha",
+    "lastName": "Nair",
+    "username": "sneha.nair",
+    "email": "sneha.nair@gmail.com",
+    "password": "Sneha@123",
+    "dob": "1998-11-03",
+    "phone": "9876543213",
+    "address": "Koramangala, Bengaluru, Karnataka",
+    "role": "PATIENT"
+  },
+  {
+    "firstName": "Vikram",
+    "lastName": "Singh",
+    "username": "vikram.singh",
+    "email": "vikram.singh@gmail.com",
+    "password": "Vikram@123",
+    "dob": "1985-07-19",
+    "phone": "9876543214",
+    "address": "Indiranagar, Bengaluru, Karnataka",
+    "role": "DOCTOR"
+  },
+  {
+    "firstName": "Ananya",
+    "lastName": "Iyer",
+    "username": "ananya.iyer",
+    "email": "ananya.iyer@gmail.com",
+    "password": "Ananya@123",
+    "dob": "1997-03-27",
+    "phone": "9876543215",
+    "address": "Jayanagar, Bengaluru, Karnataka",
+    "role": "PATIENT"
+  },
+  {
+    "firstName": "Karan",
+    "lastName": "Mehta",
+    "username": "karan.mehta",
+    "email": "karan.mehta@gmail.com",
+    "password": "Karan@123",
+    "dob": "1992-09-12",
+    "phone": "9876543216",
+    "address": "Marathahalli, Bengaluru, Karnataka",
+    "role": "DOCTOR"
+  },
+  {
+    "firstName": "Meera",
+    "lastName": "Krishnan",
+    "username": "meera.krishnan",
+    "email": "meera.krishnan@gmail.com",
+    "password": "Meera@123",
+    "dob": "1993-12-08",
+    "phone": "9876543217",
+    "address": "Banashankari, Bengaluru, Karnataka",
+    "role": "PATIENT"
+  },
+  {
+    "firstName": "Aditya",
+    "lastName": "Verma",
+    "username": "aditya.verma",
+    "email": "aditya.verma@gmail.com",
+    "password": "Aditya@123",
+    "dob": "1987-06-25",
+    "phone": "9876543218",
+    "address": "Electronic City, Bengaluru, Karnataka",
+    "role": "DOCTOR"
+  },
+  {
+    "firstName": "Pooja",
+    "lastName": "Desai",
+    "username": "pooja.desai",
+    "email": "pooja.desai@gmail.com",
+    "password": "Pooja@123",
+    "dob": "1999-01-17",
+    "phone": "9876543219",
+    "address": "Rajajinagar, Bengaluru, Karnataka",
+    "role": "PATIENT"
+  }
+]

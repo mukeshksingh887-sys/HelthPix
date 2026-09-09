@@ -2,9 +2,11 @@ package com.doctor_service.service;
 
 import com.doctor_service.dto.CreateDoctorRequest;
 import com.doctor_service.dto.DoctorResponse;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface DoctorService {
 
 
@@ -17,9 +19,8 @@ public interface DoctorService {
 
     List<DoctorResponse> getAllDoctors();
 
-    DoctorResponse updateDoctor(
-            Long doctorId,
-            CreateDoctorRequest request);
+    DoctorResponse updateDoctor(Long doctorId, CreateDoctorRequest request);
 
+//    DoctorResponse getByDoctorEmail(String email);
     void deleteDoctor(Long doctorId);
 }

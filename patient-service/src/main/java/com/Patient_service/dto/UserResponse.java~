@@ -1,0 +1,37 @@
+package com.Patient_service.dto;
+
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Data
+public class UserResponse {
+
+//    private Long id;
+    private Long userId;
+
+    private String firstName;
+
+    private String lastName;
+
+    private String username;
+
+    private String email;
+
+    private String phone;
+
+    private  String dob;
+
+    private  String gender;
+
+     private String bloodGroup;
+
+    private String role;
+
+    private String status;
+
+    private String address;
+}

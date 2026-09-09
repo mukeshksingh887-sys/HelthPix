@@ -1,5 +1,6 @@
 package com.user_service.dto;
 
+import com.user_service.entity.Enm.Gender;
 import com.user_service.entity.Enm.UserStatus;
 import com.user_service.entity.Enm.UserType;
 import lombok.*;
@@ -22,6 +23,8 @@ public class UserResponse {
     private String phone;
     private UserType role;
     private  String dob;
+    private Gender gender;
+    private String bloodGroup;
     private String address;
     private UserStatus status;
 

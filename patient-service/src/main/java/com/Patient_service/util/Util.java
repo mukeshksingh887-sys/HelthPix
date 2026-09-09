@@ -16,6 +16,7 @@ public class Util {
 
         response.setId(patient.getId());
         response.setPatientCode(patient.getPatientCode());
+        response.setUserId(patient.getUserId());
         response.setFirstName(patient.getFirstName());
         response.setLastName(patient.getLastName());
         response.setEmail(patient.getEmail());

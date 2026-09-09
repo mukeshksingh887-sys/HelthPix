@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestControllerAdvice
-public class lobalExceptionHandler {
+public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(PatientNotFoundException.class)
@@ -30,6 +30,18 @@ public class lobalExceptionHandler {
 
         return ResponseEntity
                 .badRequest()
+                .body(Map.of(
+                        "message", ex.getMessage(),
+                        "timestamp", LocalDateTime.now()
+                ));
+    }
+
+    @ExceptionHandler(UserNotFounException.class)
+    public ResponseEntity<?> handleUserNotFound(
+            UserNotFounException ex) {
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
                 .body(Map.of(
                         "message", ex.getMessage(),
                         "timestamp", LocalDateTime.now()

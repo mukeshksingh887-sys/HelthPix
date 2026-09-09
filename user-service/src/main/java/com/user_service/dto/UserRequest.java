@@ -2,6 +2,7 @@ package com.user_service.dto;
 
 
 
+import com.user_service.entity.Enm.Gender;
 import com.user_service.entity.Enm.UserType;
 import lombok.Data;
 
@@ -14,6 +15,8 @@ public class UserRequest {
     private String email;
     private String password;
     private  String dob;
+    private Gender gender;
+    private String bloodGroup;
     private String phone;
     private String address;
     private UserType role;

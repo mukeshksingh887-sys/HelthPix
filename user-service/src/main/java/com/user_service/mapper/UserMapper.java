@@ -3,6 +3,7 @@ package com.user_service.mapper;
 
 import com.user_service.dto.UserRequest;
 import com.user_service.dto.UserResponse;
+import com.user_service.entity.Enm.Gender;
 import com.user_service.entity.User;
 import com.user_service.entity.Enm.UserStatus;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,8 @@ public class UserMapper {
         user.setEmail(request.getEmail());
         user.setPhone(request.getPhone());
         user.setDob(request.getDob());
+        user.setGender(request.getGender());
+        user.setBloodGroup(request.getBloodGroup());
         user.setRole(request.getRole());
         user.setStatus(UserStatus.ACTIVE); // Default Values
         user.setAddress(request.getAddress());
@@ -42,6 +45,8 @@ public class UserMapper {
         response.setEmail(user.getEmail());
         response.setPhone(user.getPhone());
         response.setDob(user.getDob());
+        response.setGender(user.getGender());
+        response.setBloodGroup(user.getBloodGroup());
         response.setRole(user.getRole());
         response.setStatus(user.getStatus());
         response.setAddress(user.getAddress());

@@ -11,24 +11,24 @@ import java.math.BigDecimal;
 @Data
 public class CreateDoctorRequest {
 
-    @NotNull
+
     private Long userId;
 
-    @NotBlank
+
     private String specialization;
 
-    @NotBlank
+//    @NotBlan
     private String qualification;
 
-    @Min(0)
+//    @Min(0)
     private Integer experienceYears;
 
-    @DecimalMin("0.0")
+//    @DecimalMin("0.0")
     private BigDecimal consultationFee;
 
-    @NotBlank
+//    @NotBlank
     private String department;
 
-    @NotBlank
+//    @NotBlank
     private String licenseNumber;
 }

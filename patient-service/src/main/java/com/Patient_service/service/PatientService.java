@@ -2,39 +2,32 @@ package com.Patient_service.service;
 
 import com.Patient_service.dto.PatientRequest;
 import com.Patient_service.dto.PatientResponse;
-import com.Patient_service.util.PatientStatus;
-import org.springframework.stereotype.Service;
+import com.Patient_service.entity.PatientStatus;
 
 import java.util.List;
 
 
 public interface PatientService {
 
-    PatientResponse createPatient(PatientRequest request);
+    public PatientResponse createPatient(PatientRequest request);
 
-    PatientResponse getPatientById(Long id);
+    public PatientResponse getPatientById(Long id);
 
-    List<PatientResponse> getAllPatients();
+    public List<PatientResponse> getAllPatients();
 
-    PatientResponse updatePatient(
-            Long id,
-            PatientRequest request
-    );
+    public PatientResponse updatePatient(Long id, PatientRequest request);
 
-    PatientResponse PartialPatientUpdate(Long id, PatientRequest request);
+    public PatientResponse PartialPatientUpdate(Long id, PatientRequest request);
 
-    PatientResponse deletePatient(Long id);
+    public PatientResponse deletePatient(Long id);
 
-    PatientResponse updateStatus(
-            Long id,
-            PatientStatus status
-    );
+    public PatientResponse updateStatus(Long id, PatientStatus status);
 
-    List<PatientResponse> searchPatients(String keyword);
+    public List<PatientResponse> searchPatients(String keyword);
 
 
-        List<PatientResponse> getPatientsByStatus(String status);
+    public List<PatientResponse> getPatientsByStatus(String status);
 
 
-
+    public PatientResponse getPatientByEmail(String email);
 }

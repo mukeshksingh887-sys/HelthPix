@@ -1,0 +1,246 @@
+[
+  {
+    "firstName": "Arjun",
+    "lastName": "Sharma",
+    "username": "dr.arjun.sharma",
+    "email": "arjun.sharma@example.com",
+    "password": "Doctor@123",
+    "dob": "1982-05-14",
+    "phone": "9876543210",
+    "address": "12 MG Road, Bengaluru, Karnataka",
+    "role": "DOCTOR"
+  },
+  {
+    "firstName": "Priya",
+    "lastName": "Reddy",
+    "username": "dr.priya.reddy",
+    "email": "priya.reddy@example.com",
+    "password": "Doctor@123",
+    "dob": "1985-08-22",
+    "phone": "9876543211",
+    "address": "45 Banjara Hills, Hyderabad, Telangana",
+    "role": "DOCTOR"
+  },
+  {
+    "firstName": "Rahul",
+    "lastName": "Mehta",
+    "username": "dr.rahul.mehta",
+    "email": "rahul.mehta@example.com",
+    "password": "Doctor@123",
+    "dob": "1979-03-10",
+    "phone": "9876543212",
+    "address": "23 Koregaon Park, Pune, Maharashtra",
+    "role": "DOCTOR"
+  },
+  {
+    "firstName": "Sneha",
+    "lastName": "Iyer",
+    "username": "dr.sneha.iyer",
+    "email": "sneha.iyer@example.com",
+    "password": "Doctor@123",
+    "dob": "1988-11-05",
+    "phone": "9876543213",
+    "address": "78 Adyar, Chennai, Tamil Nadu",
+    "role": "DOCTOR"
+  },
+  {
+    "firstName": "Vikram",
+    "lastName": "Patel",
+    "username": "dr.vikram.patel",
+    "email": "vikram.patel@example.com",
+    "password": "Doctor@123",
+    "dob": "1981-01-18",
+    "phone": "9876543214",
+    "address": "56 Satellite Road, Ahmedabad, Gujarat",
+    "role": "DOCTOR"
+  },
+  {
+    "firstName": "Neha",
+    "lastName": "Kapoor",
+    "username": "dr.neha.kapoor",
+    "email": "neha.kapoor@example.com",
+    "password": "Doctor@123",
+    "dob": "1986-06-27",
+    "phone": "9876543215",
+    "address": "34 Vasant Kunj, New Delhi",
+    "role": "DOCTOR"
+  },
+  {
+    "firstName": "Amit",
+    "lastName": "Verma",
+    "username": "dr.amit.verma",
+    "email": "amit.verma@example.com",
+    "password": "Doctor@123",
+    "dob": "1977-09-12",
+    "phone": "9876543216",
+    "address": "19 Gomti Nagar, Lucknow, Uttar Pradesh",
+    "role": "DOCTOR"
+  },
+  {
+    "firstName": "Kavya",
+    "lastName": "Nair",
+    "username": "dr.kavya.nair",
+    "email": "kavya.nair@example.com",
+    "password": "Doctor@123",
+    "dob": "1990-02-25",
+    "phone": "9876543217",
+    "address": "67 Kakkanad, Kochi, Kerala",
+    "role": "DOCTOR"
+  },
+  {
+    "firstName": "Sanjay",
+    "lastName": "Joshi",
+    "username": "dr.sanjay.joshi",
+    "email": "sanjay.joshi@example.com",
+    "password": "Doctor@123",
+    "dob": "1983-12-03",
+    "phone": "9876543218",
+    "address": "91 Malviya Nagar, Jaipur, Rajasthan",
+    "role": "DOCTOR"
+  },
+  {
+    "firstName": "Ananya",
+    "lastName": "Desai",
+    "username": "dr.ananya.desai",
+    "email": "ananya.desai@example.com",
+    "password": "Doctor@123",
+    "dob": "1987-07-19",
+    "phone": "9876543219",
+    "address": "28 Bandra West, Mumbai, Maharashtra",
+    "role": "DOCTOR"
+  }
+]
+
+
+[
+  {
+    "firstName": "Rahul",
+    "lastName": "Sharma",
+    "username": "rahul.sharma",
+    "email": "rahul.sharma@example.com",
+    "password": "Rahul@123",
+    "dob": "1990-05-15",
+    "gender": "MALE",
+    "bloodGroup": "O+",
+    "phone": "9876543210",
+    "address": "Delhi, India",
+    "role": "PATIENT"
+  },
+  {
+    "firstName": "Priya",
+    "lastName": "Verma",
+    "username": "priya.verma",
+    "email": "priya.verma@example.com",
+    "password": "Priya@123",
+    "dob": "1992-08-20",
+    "gender": "FEMALE",
+    "bloodGroup": "A+",
+    "phone": "9876543211",
+    "address": "Mumbai, India",
+    "role": "PATIENT"
+  },
+  {
+    "firstName": "Amit",
+    "lastName": "Kumar",
+    "username": "amit.kumar",
+    "email": "amit.kumar@example.com",
+    "password": "Amit@123",
+    "dob": "1988-12-10",
+    "gender": "MALE",
+    "bloodGroup": "B+",
+    "phone": "9876543212",
+    "address": "Bengaluru, India",
+    "role": "DOCTOR"
+  },
+  {
+    "firstName": "Neha",
+    "lastName": "Kapoor",
+    "username": "neha.kapoor",
+    "email": "neha.kapoor@example.com",
+    "password": "Neha@123",
+    "dob": "1986-06-27",
+    "gender": "FEMALE",
+    "bloodGroup": "AB+",
+    "phone": "9876543215",
+    "address": "New Delhi, India",
+    "role": "PATIENT"
+  },
+  {
+    "firstName": "Vikas",
+    "lastName": "Singh",
+    "username": "vikas.singh",
+    "email": "vikas.singh@example.com",
+    "password": "Vikas@123",
+    "dob": "1991-04-18",
+    "gender": "MALE",
+    "bloodGroup": "O-",
+    "phone": "9876543216",
+    "address": "Lucknow, India",
+    "role": "PATIENT"
+  },
+  {
+    "firstName": "Anjali",
+    "lastName": "Mehta",
+    "username": "anjali.mehta",
+    "email": "anjali.mehta@example.com",
+    "password": "Anjali@123",
+    "dob": "1994-09-05",
+    "gender": "FEMALE",
+    "bloodGroup": "A-",
+    "phone": "9876543217",
+    "address": "Pune, India",
+    "role": "PATIENT"
+  },
+  {
+    "firstName": "Rohit",
+    "lastName": "Gupta",
+    "username": "rohit.gupta",
+    "email": "rohit.gupta@example.com",
+    "password": "Rohit@123",
+    "dob": "1987-11-22",
+    "gender": "MALE",
+    "bloodGroup": "B-",
+    "phone": "9876543218",
+    "address": "Jaipur, India",
+    "role": "DOCTOR"
+  },
+  {
+    "firstName": "Sneha",
+    "lastName": "Patel",
+    "username": "sneha.patel",
+    "email": "sneha.patel@example.com",
+    "password": "Sneha@123",
+    "dob": "1996-03-12",
+    "gender": "FEMALE",
+    "bloodGroup": "AB-",
+    "phone": "9876543219",
+    "address": "Ahmedabad, India",
+    "role": "PATIENT"
+  },
+  {
+    "firstName": "Karan",
+    "lastName": "Malhotra",
+    "username": "karan.malhotra",
+    "email": "karan.malhotra@example.com",
+    "password": "Karan@123",
+    "dob": "1985-07-30",
+    "gender": "MALE",
+    "bloodGroup": "O+",
+    "phone": "9876543220",
+    "address": "Chandigarh, India",
+    "role": "ADMIN"
+  },
+  {
+    "firstName": "Pooja",
+    "lastName": "Reddy",
+    "username": "pooja.reddy",
+    "email": "pooja.reddy@example.com",
+    "password": "Pooja@123",
+    "dob": "1993-01-25",
+    "gender": "FEMALE",
+    "bloodGroup": "A+",
+    "phone": "9876543221",
+    "address": "Hyderabad, India",
+    "role": "PATIENT"
+  }
+]

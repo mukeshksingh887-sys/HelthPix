@@ -33,4 +33,23 @@ public class GlobalExceptionHandler {
     }
 
 
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<?> userAlreadyExists(
+            UserAlreadyExistsException ex) {
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(
+                        Map.of(
+                                "timestamp", LocalDateTime.now(),
+                                "status", 503,
+                                "message", ex.getMessage()
+                        )
+
+                        
+                );
+    }
+
+
 }

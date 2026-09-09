@@ -18,7 +18,7 @@ public class PatientRequest {
     private String firstName;
     private String lastName;
     private String email;
-
+    private Long userId;
     private String phone;
     private LocalDate dateOfBirth;
     private String gender;

@@ -1,9 +1,8 @@
 package com.Patient_service.repository;
 
 import com.Patient_service.entity.Patient;
-import com.Patient_service.util.PatientStatus;
+import com.Patient_service.entity.PatientStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 

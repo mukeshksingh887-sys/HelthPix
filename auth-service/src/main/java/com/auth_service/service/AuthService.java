@@ -5,6 +5,7 @@ import com.auth_service.dto.*;
 import com.auth_service.entity.AuthUser;
 import com.auth_service.entity.RefreshToken;
 import com.auth_service.exception.BadCredentialsException;
+import com.auth_service.exception.UserAlreadyExistsException;
 import com.auth_service.repository.AuthUserRepository;
 import com.auth_service.repository.RefreshTokenRepository;
 import com.auth_service.util.JwtService;
@@ -23,9 +24,6 @@ import java.time.LocalDateTime;
 public class AuthService {
 
     @Autowired
-    private final AuthUserRepository repository;
-
-    @Autowired
     private final AuthUserRepository authRepository;
 
     @Autowired
@@ -42,11 +40,11 @@ public class AuthService {
 
     public void createAuthUser(AuthUserRequest request) {
 
-        if (repository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException(
-                    "Email already exists"
-            );
-        }
+//        if (authRepository.existsByEmail(request.getEmail())) {
+//            throw new UserAlreadyExistsException(
+//                    "Email already exists"
+//            );
+//        }
 
         AuthUser authUser = AuthUser.builder()
                 .userId(request.getUserId())
@@ -55,18 +53,18 @@ public class AuthService {
                 .role(request.getRole())
                 .build();
 
-        repository.save(authUser);
+        authRepository.save(authUser);
     }
 
 
     public void deleteAuthUser(Long userId) {
 
-        AuthUser authUser = repository
+        AuthUser authUser = authRepository
                 .findByUserId(userId)
                 .orElseThrow(() ->
                         new RuntimeException("User not found"));
 
-        repository.delete(authUser);
+        authRepository.delete(authUser);
     }
 
 

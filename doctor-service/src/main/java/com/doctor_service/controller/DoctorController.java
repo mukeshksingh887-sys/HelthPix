@@ -5,6 +5,7 @@ import com.doctor_service.dto.DoctorResponse;
 import com.doctor_service.service.DoctorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,16 +13,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/doctors")
+@RequestMapping("/api/doctors")
 @RequiredArgsConstructor
 public class DoctorController {
 
-    private final DoctorService doctorService;
+    @Autowired
+    private DoctorService doctorService;
 
     /**
      * Create Doctor
      */
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<DoctorResponse> createDoctor(
             @Valid @RequestBody CreateDoctorRequest request) {
 
@@ -36,7 +38,7 @@ public class DoctorController {
     /**
      * Get Doctor By Doctor Id
      */
-    @GetMapping("/{doctorId}")
+    @GetMapping("get/{doctorId}")
     public ResponseEntity<DoctorResponse> getDoctorById(
             @PathVariable Long doctorId) {
 
@@ -60,7 +62,7 @@ public class DoctorController {
     /**
      * Get All Doctors
      */
-    @GetMapping
+    @GetMapping("/getAllDoctor")
     public ResponseEntity<List<DoctorResponse>> getAllDoctors() {
 
         return ResponseEntity.ok(
@@ -71,7 +73,7 @@ public class DoctorController {
     /**
      * Update Doctor
      */
-    @PutMapping("/{doctorId}")
+    @PutMapping("update/{doctorId}")
     public ResponseEntity<DoctorResponse> updateDoctor(
             @PathVariable Long doctorId,
             @Valid @RequestBody CreateDoctorRequest request) {
@@ -87,7 +89,7 @@ public class DoctorController {
     /**
      * Delete Doctor
      */
-    @DeleteMapping("/{doctorId}")
+    @DeleteMapping("delete/{doctorId}")
     public ResponseEntity<String> deleteDoctor(
             @PathVariable Long doctorId) {
 

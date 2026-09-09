@@ -3,9 +3,8 @@ package com.Patient_service.controller;
 
 import com.Patient_service.dto.PatientRequest;
 import com.Patient_service.dto.PatientResponse;
-import com.Patient_service.entity.Patient;
 import com.Patient_service.service.PatientService;
-import com.Patient_service.util.PatientStatus;
+import com.Patient_service.entity.PatientStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

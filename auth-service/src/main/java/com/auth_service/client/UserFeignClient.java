@@ -8,11 +8,17 @@ import org.springframework.web.bind.annotation.*;
 public interface UserFeignClient {
 
     @GetMapping("/internal/users/email/{email}")
-    UserResponse getByEmail(@PathVariable  String email);
+    UserResponse getUserByEmail(@PathVariable  String email);
 
+
+//    @GetMapping("/internal/users/{id}")
+//    UserResponse getById(
+//            @PathVariable  Long id
+//    );
 
     @GetMapping("/internal/users/{id}")
-    UserResponse getById(
-            @PathVariable  Long id
-    );
+    UserResponse getUserById(@PathVariable Long id);
+
+
+
 }

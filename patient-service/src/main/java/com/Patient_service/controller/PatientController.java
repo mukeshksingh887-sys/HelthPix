@@ -36,7 +36,7 @@ public class PatientController {
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<PatientResponse> getPatient(
             @PathVariable Long id) {
 
@@ -65,7 +65,7 @@ public class PatientController {
     }
 
 
-    @PatchMapping("/{id}")
+    @PatchMapping("update/{id}")
     public ResponseEntity<PatientResponse> patchPatient(
             @PathVariable Long id,
             @RequestBody PatientRequest request) {
@@ -74,7 +74,7 @@ public class PatientController {
     }
 
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<PatientResponse> deletePatient(
             @PathVariable Long id) {
 
@@ -84,17 +84,17 @@ public class PatientController {
     }
 
 //    // UPDATE STATUS
-//    @PatchMapping("/Status/{id}")
-//    public ResponseEntity<PatientResponse> updateStatus(
-//            @PathVariable Long id,
-//            @RequestParam PatientStatus status) {
-//
-//        return ResponseEntity.ok(
-//                patientService.updateStatus(id, status)
-//        );
-//    }
+    @PatchMapping("/Status/{id}")
+    public ResponseEntity<PatientResponse> updateStatus(
+            @PathVariable Long id,
+            @RequestParam PatientStatus status) {
 
-    @PatchMapping("/{id}/status")
+        return ResponseEntity.ok(
+                patientService.updateStatus(id, status)
+        );
+    }
+
+    @PatchMapping("update/{id}/status")
     public ResponseEntity<PatientResponse> updateStatus(
             @PathVariable Long id,
             @RequestBody PatientRequest request) {
@@ -105,7 +105,7 @@ public class PatientController {
     }
 
 
-    @GetMapping("/status")
+    @GetMapping("get/status")
     public ResponseEntity<List<PatientResponse>> getPatientsByStatus(
             @RequestParam String status) {
 
@@ -126,4 +126,30 @@ public class PatientController {
 
         return ResponseEntity.ok(patients);
     }
+
+
+    @GetMapping("/blood-group/{bloodGroup}")
+    public List<PatientResponse> getPatientsByBloodGroup(
+            @PathVariable String bloodGroup) {
+
+        return patientService.getPatientsByBloodGroup(bloodGroup);
+    }
+
+
+    @GetMapping("/count")
+    public Long countPatients() {
+        return patientService.countPatients();
+    }
+
+//    @PreAuthorize("hasRole('DOCTOR')")
+//    @PostMapping("/medicine-suggestion")
+//    public ResponseEntity<MedicineSuggestionResponse>
+//    generateMedicineSuggestion(
+//            @Valid @RequestBody MedicineSuggestionRequest request) {
+//
+//        return ResponseEntity.ok(
+//                medicineSuggestionService
+//                        .generateSuggestion(request)
+//        );
+//    }
 }

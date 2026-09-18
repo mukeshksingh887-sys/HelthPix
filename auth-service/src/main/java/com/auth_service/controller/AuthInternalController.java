@@ -3,7 +3,9 @@ package com.auth_service.controller;
 
 
 import com.auth_service.dto.AuthUserRequest;
+import com.auth_service.dto.ChangePasswordRequest;
 import com.auth_service.service.AuthService;
+import com.auth_service.service.AuthServiceImp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +36,15 @@ public class AuthInternalController {
         authService.deleteAuthUser(userId);
 
         return ResponseEntity.ok("Auth User Deleted");
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<Void> updatePassword(
+            @PathVariable Long userId,
+            @RequestParam ChangePasswordRequest password) {
+
+        authService.changePassword(userId, password);
+
+        return ResponseEntity.ok().build();
     }
 }

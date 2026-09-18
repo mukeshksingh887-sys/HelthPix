@@ -17,35 +17,37 @@ spring:
               predicates:
                 - Path=/api/user/**
 
+            - id:  auth-service
+              uri: lb://AUTH-SERVICE
+              predicates:
+                - Path=/api/auth/**
+
             - id: patient-service
               uri: lb://PATIENT-SERVICE
               predicates:
-                 - Path=/api/patients/**
-#
-#        - id: DOCTOR-SERVICE
-#          uri: lb://DOCTOR-SERVICE
-#          predicates:
-#            - Path=/api/doctors/**
-#
-#        - id: APPOINTMENT-SERVICE
-#          uri: lb://APPOINTMENT-SERVICE
-#          predicates:
-#            - Path=/api/appointments/**
-#
-#        - id: BILLING-SERVICE
-#          uri: lb://BILLING-SERVICE
-#          predicates:
-#            - Path=/api/billing/**
-#
-#        - id: PHARMACY-SERVICE
-#          uri: lb://PHARMACY-SERVICE
-#          predicates:
-#            - Path=/api/pharmacy/**
-#
-#        - id: LAB-SERVICE
-#          uri: lb://LAB-SERVICE
-#          predicates:
-#            - Path=/api/labs/**
+                - Path=/api/patients/**
+
+            - id: DOCTOR-SERVICE
+              uri: lb://DOCTOR-SERVICE
+              predicates:
+                - Path=/api/doctors/**
+
+            - id: APPOINTMENT-SERVICE
+              uri: lb://APPOINTMENT-SERVICE
+              predicates:
+                - Path=/api/appointments/**
+
+            - id: BILLING-SERVICE
+              uri: lb://BILLING-SERVICE
+              predicates:
+                - Path=/api/billing/**
+
+            - id: PHARMACY-SERVICE
+              uri: lb://PHARMACY-SERVICE
+              predicates:
+                - Path=/api/pharmacy/**
+
+
 
 eureka:
   client:

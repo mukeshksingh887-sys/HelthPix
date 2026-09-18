@@ -1,9 +1,7 @@
 package com.auth_service.util;
 
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
@@ -16,20 +14,21 @@ public class JwtService {
 
     private static final String SECRET_KEY = "mySuperSecretJwtKeyForHospitalManagementSystem2026";
 
-    private Key getKey() {
-        return Keys.hmacShaKeyFor(
-                SECRET_KEY.getBytes(StandardCharsets.UTF_8));
-    }
+//    private Key getKey() {
+//        return Keys.hmacShaKeyFor(
+//                SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+//    }
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
 
     // Access Token (15 min)
-    public String generateAccessToken(String email, String userId, String role) {
+    public String generateAccessToken(String userId, String email, String role) {
 
         return Jwts.builder()
                 .setSubject(userId)
+                .claim("userId",userId)
                 .claim("role",role)
                 .claim("email",email)
                 .setIssuedAt(new Date())
@@ -63,26 +62,98 @@ public class JwtService {
 
 
     // Check Token Expired
-    public boolean isTokenExpired(String token) {
+//    public boolean isTokenExpired(String token) {
+//
+//        Date expiration = Jwts.parser()
+//                .setSigningKey(getSigningKey())
+//                .parseClaimsJws(token)
+//                .getBody()
+//                .getExpiration();
+//
+//        return expiration.before(new Date());
+//    }
 
-        Date expiration = Jwts.parser()
+
+
+    public Claims extractClaims(String token) {
+//        return Jwts.parser()
+//                .verifyWith((SecretKey) getKey())
+//                .build()
+//                .parseSignedClaims(token)
+//                .getPayload();
+
+        Claims claims = Jwts.parser()
                 .setSigningKey(getSigningKey())
                 .parseClaimsJws(token)
-                .getBody()
-                .getExpiration();
-
-        return expiration.before(new Date());
-    }
-
-    // Validate Token
-    public boolean validateToken(String token, String username) {
-
-        String tokenUsername = extractUsername(token);
-
-        return tokenUsername.equals(username)
-                && !isTokenExpired(token);
+                .getBody();
+        return  claims;
     }
 
 
+
+
+
+//    @Override
+    public Long extractUserId(String token) {
+
+        return Long.valueOf(
+                extractClaims(token)
+                        .get("userId")
+                        .toString());
+    }
+
+//    @Override
+    public String extractEmail(String token) {
+
+        return extractClaims(token).getSubject();
+    }
+
+//    @Override
+    public String extractRole(String token) {
+
+        return extractClaims(token)
+                .get("role")
+                .toString();
+    }
+
+//    @Override
+    public boolean isTokenExpired(String token) {
+
+        return extractClaims(token)
+                .getExpiration()
+                .before(new Date());
+    }
+
+//    @Override
+    public boolean validateToken(String token) {
+
+        try {
+
+            Claims claims = extractClaims(token);
+
+            return claims.getExpiration()
+                    .after(new Date());
+
+        } catch (ExpiredJwtException ex) {
+
+            return false;
+
+        } catch (MalformedJwtException ex) {
+
+            return false;
+
+        } catch (UnsupportedJwtException ex) {
+
+            return false;
+
+        } catch (IllegalArgumentException ex) {
+
+            return false;
+
+        } catch (JwtException ex) {
+
+            return false;
+        }
+    }
 
 }

@@ -33,7 +33,7 @@ public class AppointmentController {
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping("get/{id}")
     public ResponseEntity<AppointmentResponse> getById(
             @PathVariable Long id) {
 

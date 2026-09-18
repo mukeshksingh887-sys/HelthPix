@@ -20,16 +20,12 @@ public class CreateAppointmentRequest {
 
     private LocalDate appointmentDate;
 
-//    private LocalTime appointmentTime;
+    private LocalTime startTime;
 
-
-    LocalTime startTime;
-
-
-    LocalTime endTime;
+    private LocalTime endTime;
 
     private String reason;
 
-    private  String  notes;
+    private String notes;
 
 }

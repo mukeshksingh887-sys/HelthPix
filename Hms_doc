@@ -21,14 +21,14 @@ Login
 Logout
 Refresh Token
 Roles
-ADMIN
-DOCTOR
-PATIENT
-NURSE
-RECEPTIONIST
-LAB_TECHNICIAN
-PHARMACIST
-ACCOUNTANT
+ ADMIN
+ DOCTOR
+ PATIENT
+ NURSE
+ RECEPTIONIST
+ LAB_TECHNICIAN
+ PHARMACIST
+ ACCOUNTANT
 ----------------------------------
 2. Patient Service
 ------------------------------------
@@ -132,8 +132,10 @@ Get Prescription
 Medicine Suggestions
 Drug Interaction Check
 Print Prescription
+
 10. Pharmacy Service
 APIs
+--------------------
 Add Medicine
 Update Medicine
 Delete Medicine

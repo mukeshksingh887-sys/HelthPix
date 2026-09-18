@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,9 @@ public interface PatientRepository extends JpaRepository<Patient,Long> {
             String firstName,
             String lastName
     );
+
+    List<Patient> findByBloodGroup(String bloodGroup);
+
 
 //    @Query("""
 //       SELECT p FROM Patient p

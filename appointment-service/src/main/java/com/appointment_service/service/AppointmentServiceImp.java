@@ -47,8 +47,6 @@ public class AppointmentServiceImp implements AppointmentService {
             CreateAppointmentRequest request
     ) {
 
-//        log.info("  request patient Id:  {}" , request.getPatientId());
-//         1. Validate patient
         PatientResponse patient = patientServiceClient.getPatientById(request.getPatientId());
         log.info(" patient info  {}" , patient);
 
@@ -65,9 +63,6 @@ public class AppointmentServiceImp implements AppointmentService {
             throw new DocterNotFoundException("Doctor not found or inactive");
         }
 
-
-
-
         // 3. Validate time
         if (!request.getEndTime().isAfter(request.getStartTime())) {
             throw new IllegalArgumentException("End time must be after start time");
@@ -83,7 +78,7 @@ public class AppointmentServiceImp implements AppointmentService {
             throw new RuntimeException("End time must be after start time");
         }
 
-
+       // check for doctor available
         if (isOverlapping(
                 request.getDoctorId(),
                 request.getAppointmentDate(),
@@ -92,6 +87,7 @@ public class AppointmentServiceImp implements AppointmentService {
 
             throw new SlotNotAvailableException("Doctor is not available at this time");
         }
+
         // 4. Check doctor slot
         boolean doctorBusy =
                 appointmentRepository
@@ -119,9 +115,6 @@ public class AppointmentServiceImp implements AppointmentService {
                                 AppointmentStatus.CANCELLED
                         );
 
-
-
-
         if (patientBusy) {
             throw new SlotNotAvailableException("Patient already has an appointment at this time");
         }
@@ -141,7 +134,12 @@ public class AppointmentServiceImp implements AppointmentService {
 
         Appointment saved = appointmentRepository.save(appointment);
 
-        return mapToResponse(saved);
+
+        return mapToResponse(
+                saved,
+                patient,
+                doctor
+        );
     }
 
     private boolean isOverlapping(
@@ -190,11 +188,16 @@ public class AppointmentServiceImp implements AppointmentService {
       }
 
 
-//        PatientResponse patient =
-//                patientServiceClient.getPatientById(appointment.getPatientId());
-//
-//        DoctorResponse doctor = doctorServiceClient.getDoctorById(appointment.getDoctorId());
-  return  mapToResponse(appointment);
+        PatientResponse patient =
+                patientServiceClient.getPatientById(appointment.getPatientId());
+
+        DoctorResponse doctor = doctorServiceClient.getDoctorById(appointment.getDoctorId());
+
+        return mapToResponse(
+                appointment,
+                patient,
+                doctor
+        );
     }
 
     @Override
@@ -264,7 +267,7 @@ public class AppointmentServiceImp implements AppointmentService {
         if (appointment.getStatus() ==
                 AppointmentStatus.COMPLETED) {
 
-            throw new RuntimeException(
+            throw new AppointmentNotFoundException(
                     "Completed appointment cannot be cancelled");
         }
 
@@ -400,7 +403,7 @@ public class AppointmentServiceImp implements AppointmentService {
             DoctorResponse doctor) {
 
         return AppointmentResponse.builder()
-                .id(appointment.getAppointmentId())
+                .appointmentId(appointment.getAppointmentId())
                 .patientId(patient.getId())
 //                .patientName(
 //                        patient.getFirstName()
@@ -426,20 +429,36 @@ public class AppointmentServiceImp implements AppointmentService {
 
 
 
-    private AppointmentResponse mapToResponse(Appointment appointment) {
+//    private AppointmentResponse mapToResponse(Appointment appointment) {
+//
+//        return new AppointmentResponse(
+//                appointment.getAppointmentId(),
+//                appointment.getPatientId(),
+//                appointment.getDoctorId(),
+//                appointment.getAppointmentDate(),
+//                appointment.getStartTime(),
+//                appointment.getEndTime(),
+//                appointment.getStatus(),
+//                appointment.getReason(),
+//                appointment.getNotes());
+//    }
 
-        return new AppointmentResponse(
-                appointment.getAppointmentId(),
-                appointment.getPatientId(),
-                appointment.getDoctorId(),
-                appointment.getAppointmentDate(),
-                appointment.getStartTime(),
-                appointment.getEndTime(),
-                appointment.getStatus(),
-                appointment.getReason(),
-                appointment.getNotes());
+    private AppointmentResponse mapToResponse(
+            Appointment appointment,
+            PatientResponse patient,
+            DoctorResponse doctor) {
+
+        return AppointmentResponse.builder()
+                .appointmentId(appointment.getAppointmentId())
+                .patient(patient)
+                .doctor(doctor)
+                .appointmentDate(appointment.getAppointmentDate())
+                .startTime(appointment.getStartTime())
+                .endTime(appointment.getEndTime())
+                .status(appointment.getStatus())
+                .reason(appointment.getReason())
+                .notes(appointment.getNotes())
+                .build();
     }
-
-
 
 }

@@ -6,6 +6,7 @@ import com.Patient_service.dto.PatientResponse;
 import com.Patient_service.dto.UserResponse;
 import com.Patient_service.entity.Patient;
 import com.Patient_service.entity.UserType;
+import com.Patient_service.exception.DeleteFaildException;
 import com.Patient_service.exception.PatientNotFoundException;
 import com.Patient_service.exception.UserNotFounException;
 import com.Patient_service.repository.PatientRepository;
@@ -37,6 +38,20 @@ public class PatientServiceImpl implements PatientService{
 
     @Autowired
      private UserServiceClient userServiceClient;
+
+//    @Autowired
+//    private AiServiceClient aiServiceClient;
+
+//    public MedicineSuggestionResponse
+//    getMedicineSuggestion(
+//            MedicineSuggestionRequest request) {
+//
+//        return aiServiceClient
+//                .generateMedicineSuggestion(request);
+//    }
+
+
+
 
     @Override
     @Transactional
@@ -138,7 +153,6 @@ public class PatientServiceImpl implements PatientService{
 
         return patientResponses;
     }
-
 
 
     @Override
@@ -287,9 +301,37 @@ public class PatientServiceImpl implements PatientService{
                         new PatientNotFoundException(
                                 "Patient not found: " + id
                         ));
-        patient.setStatus(PatientStatus.valueOf(String.valueOf(PatientStatus.INACTIVE)));
 
-         patientRepository.delete(patient);
+
+
+//          userServiceClient.deleteUserById(patient.getUserId());
+//
+//        patient.setStatus(PatientStatus.valueOf(String.valueOf(PatientStatus.INACTIVE)));
+//
+//         patientRepository.delete(patient);
+        try {
+
+            // Delete user from User Service
+            userServiceClient.deleteUserById(
+                    patient.getUserId());
+
+            // Soft delete patient
+            patient.setStatus(PatientStatus.INACTIVE);
+
+            // Hard delete patient record
+            patientRepository.delete(patient);
+
+        } catch (Exception ex) {
+
+            log.error(
+                    "Failed to delete patient with userId: {}",
+                    patient.getUserId(),
+                    ex);
+
+            throw new DeleteFaildException(
+                    "Failed to delete patient and user"
+                    );
+        }
 
 //        PatientEvent event = PatientEvent.builder()
 //                .eventType("PATIENT_DELETED")
@@ -307,10 +349,6 @@ public class PatientServiceImpl implements PatientService{
 //        kafkaProducer.publishPatientEvent(event);
      return  util.mapToResponse(patient);
     }
-
-
-
-
 
 
     @Override
@@ -348,8 +386,20 @@ public class PatientServiceImpl implements PatientService{
         return util.mapToResponse(patient);
     }
 
+    @Override
+    public List<PatientResponse> getPatientsByBloodGroup(String bloodGroup) {
 
+        return patientRepository.findByBloodGroup(bloodGroup)
+                .stream()
+                .map(util::mapToResponse)
+                .toList();
+    }
 
+    @Override
+    public long countPatients() {
+
+        return patientRepository.count();
+    }
 
 
     private String generatePatientCode() {

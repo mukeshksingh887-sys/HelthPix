@@ -23,3 +23,15 @@ public class DoctorResponse {
     private String licenseNumber;
     private UserResponse user;
 }
+
+//private Long doctorId;
+//private Long userId;
+//private String specialization;
+//private String qualification;
+//private Integer experienceYears;
+//private BigDecimal consultationFee;
+//private String department;
+//private String licenseNumber;
+//private DoctorStatus status;
+//
+//private UserResponse user;

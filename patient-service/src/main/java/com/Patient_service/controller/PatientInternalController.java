@@ -29,4 +29,10 @@ public class PatientInternalController {
     }
 
 
+    @GetMapping("/count")
+    public long countPatients() {
+
+        return patientService.countPatients();
+    }
+
 }

@@ -122,10 +122,6 @@ public class UserServiceImp implements  UserService {
                 .orElseThrow(() ->
                         new UserNotFoundException("User not found"));
 
-//        authFeignClient.deleteAuthUser(id);
-//        userRepository.delete(user);
-
-
         try {
 
             authFeignClient.deleteAuthUser(id);

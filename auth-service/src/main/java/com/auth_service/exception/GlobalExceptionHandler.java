@@ -20,6 +20,19 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<?> ResourceNotFoundException(ResourceNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(
+                        Map.of(
+                                "timestamp", LocalDateTime.now(),
+                                "status", 401,
+                                "message", ex.getMessage()
+                        )
+                );
+    }
+
+
     @ExceptionHandler(ServiceUnavailableException.class)
     public ResponseEntity<?> handleServiceUnavailable(
             ServiceUnavailableException ex) {
@@ -31,7 +44,6 @@ public class GlobalExceptionHandler {
                         "message", ex.getMessage()
                 ));
     }
-
 
 
     @ExceptionHandler(UserAlreadyExistsException.class)
@@ -47,7 +59,6 @@ public class GlobalExceptionHandler {
                                 "message", ex.getMessage()
                         )
 
-                        
                 );
     }
 

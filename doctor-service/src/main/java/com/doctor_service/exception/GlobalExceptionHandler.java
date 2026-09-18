@@ -30,4 +30,39 @@ public class GlobalExceptionHandler {
     }
 
 
+    @ExceptionHandler(
+            LicenseNumberAlreadyExistsException.class)
+    public ResponseEntity<String> handleLicenseNumberExists(
+            LicenseNumberAlreadyExistsException ex) {
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<?> handleResourseNotFoundExcepiotn(
+            ResourceNotFoundException ex) {
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of(
+                        "timestamp", LocalDateTime.now(),
+                        "status", 503,
+                        "message", ex.getMessage()
+                ));
+    }
+
+
+    @ExceptionHandler(
+            DeleteFaildException.class)
+    public ResponseEntity<String> handleDeleteFailedException(
+            DeleteFaildException ex) {
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ex.getMessage());
+    }
+
+
+
 }

@@ -47,4 +47,14 @@ public class GlobalExceptionHandler {
                         "timestamp", LocalDateTime.now()
                 ));
     }
+
+    @ExceptionHandler(
+            DeleteFaildException.class)
+    public ResponseEntity<String> handleDeleteFailedException(
+            DeleteFaildException ex) {
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ex.getMessage());
+    }
 }

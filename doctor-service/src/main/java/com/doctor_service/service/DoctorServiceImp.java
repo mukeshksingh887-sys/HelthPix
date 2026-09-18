@@ -1,11 +1,13 @@
 package com.doctor_service.service;
 
+import com.doctor_service.client.AiServiceClient;
 import com.doctor_service.client.UserServiceClient;
 import com.doctor_service.dto.CreateDoctorRequest;
 import com.doctor_service.dto.DoctorResponse;
 import com.doctor_service.dto.UserResponse;
 import com.doctor_service.enitiy.Doctor;
 import com.doctor_service.enitiy.DoctorStatus;
+import com.doctor_service.exception.DeleteFaildException;
 import com.doctor_service.exception.ResourceNotFoundException;
 import com.doctor_service.repository.DoctorRepository;
 import jakarta.transaction.Transactional;
@@ -13,53 +15,33 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class DoctorServiceImp implements DoctorService {
 
     @Autowired
+    private  AiServiceClient aiServiceClient;
+
+    @Autowired
     private  DoctorRepository doctorRepository;
+
     @Autowired
     private  UserServiceClient userServiceClient;
 
-//    @Override
-//    public DoctorResponse createDoctor(CreateDoctorRequest request) {
+//    public MedicineSuggestionResponse
+//    getMedicineSuggestion(
+//            MedicineSuggestionRequest request) {
 //
-//        // Validate User Exists
-//        UserResponse user = userServiceClient.getUserById(request.getUserId());
-//
-//        if (doctorRepository.existsByDoctorId(request.getUserId())) {
-//            throw new IllegalArgumentException(
-//                    "Doctor already exists for userId : "
-//                            + request.getUserId());
-//        }
-//
-//        if (doctorRepository.existsByLicenseNumber(
-//                request.getLicenseNumber())) {
-//
-//            throw new IllegalArgumentException(
-//                    "License number already exists : "
-//                            + request.getLicenseNumber());
-//        }
-//
-//        Doctor doctor = Doctor.builder()
-//                .userId(request.getUserId())
-//                .specialization(request.getSpecialization())
-//                .qualification(request.getQualification())
-//                .experienceYears(request.getExperienceYears())
-//                .consultationFee(request.getConsultationFee())
-//                .department(request.getDepartment())
-//                .licenseNumber(request.getLicenseNumber())
-//                .status(DoctorStatus.AVAILABLE)
-//                .build();
-//
-//        Doctor savedDoctor = doctorRepository.save(doctor);
-//
-//        return mapToResponse(savedDoctor);
+//        return aiServiceClient
+//                .generateMedicineSuggestion(request);
 //    }
+//
+
 
 
 
@@ -155,7 +137,7 @@ public class DoctorServiceImp implements DoctorService {
     @Transactional
     public DoctorResponse getDoctorByUserId(Long userId) {
 
-        Doctor doctor = doctorRepository.findByDoctorId(userId)
+        Doctor doctor = doctorRepository.findDoctorByUserId(userId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "Doctor not found for userId : "
@@ -209,7 +191,7 @@ public class DoctorServiceImp implements DoctorService {
                 && doctorRepository.existsByLicenseNumber(
                 request.getLicenseNumber())) {
 
-            throw new IllegalArgumentException(
+            throw new LayerInstantiationException(
                     "License number already exists");
         }
 
@@ -247,6 +229,7 @@ public class DoctorServiceImp implements DoctorService {
 //    }
 
     @Override
+    @Transactional
     public void deleteDoctor(Long doctorId) {
 
         Doctor doctor = doctorRepository.findById(doctorId)
@@ -255,10 +238,133 @@ public class DoctorServiceImp implements DoctorService {
                                 "Doctor not found with id : "
                                         + doctorId));
 
-        doctorRepository.delete(doctor);
+
+//        userServiceClient.deleteUser(doctor.getUserId());
+//
+//
+//        doctorRepository.delete(doctor);
+
+        try {
+
+            userServiceClient.deleteUser(
+                    doctor.getUserId());
+
+            doctorRepository.delete(doctor);
+
+        } catch (Exception ex) {
+
+            throw new DeleteFaildException(
+                    "Failed to delete user service record"
+                    );
+        }
     }
 
 
+
+
+
+    @Override
+    public DoctorResponse updateDoctorStatus(
+            Long doctorId,
+            DoctorStatus status) {
+
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Doctor not found"));
+
+        doctor.setStatus(status);
+
+        Doctor updatedDoctor =
+                doctorRepository.save(doctor);
+
+        UserResponse user =
+                userServiceClient.getUserById(
+                        updatedDoctor.getUserId());
+
+        return mapToDoctorResponse(
+                updatedDoctor,
+                user);
+    }
+
+
+
+    @Override
+    public DoctorResponse updateConsultationFee(
+            Long doctorId,
+            BigDecimal fee) {
+
+        Doctor doctor =
+                doctorRepository.findById(
+                                doctorId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Doctor not found"));
+
+        doctor.setConsultationFee(fee);
+
+        Doctor updatedDoctor =
+                doctorRepository.save(doctor);
+
+        UserResponse user =
+                userServiceClient.getUserById(
+                        updatedDoctor.getUserId());
+
+        return mapToDoctorResponse(
+                updatedDoctor,
+                user);
+    }
+
+
+    @Override
+    public List<DoctorResponse>
+    getDoctorsBySpecialization(
+            String specialization) {
+
+        List<Doctor> doctors =
+                doctorRepository
+                        .findBySpecializationContainingIgnoreCase(
+                                specialization);
+
+        return doctors.stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+
+
+
+    @Override
+    public List<DoctorResponse> getDoctorsByMinimumExperience(Integer years) {
+
+        List<Doctor> doctors =
+                doctorRepository.findByExperienceYearsGreaterThanEqual(years);
+
+        if (doctors.isEmpty()) {
+            throw new ResourceNotFoundException(
+                    "No doctors found with experience greater than or equal to "
+                            + years + " years");
+        }
+
+        return doctors.stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+
+
+    @Override
+    public List<DoctorResponse> getDoctorsByConsultationFeeRange(
+            BigDecimal min,
+            BigDecimal max) {
+
+        List<Doctor> doctors =
+                doctorRepository.findByConsultationFeeBetween(min, max);
+
+        return doctors.stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
 
 
 

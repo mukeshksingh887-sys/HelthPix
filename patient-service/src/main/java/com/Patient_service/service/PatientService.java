@@ -30,4 +30,11 @@ public interface PatientService {
 
 
     public PatientResponse getPatientByEmail(String email);
+
+    List<PatientResponse> getPatientsByBloodGroup(String bloodGroup);
+
+    long countPatients();
+
+
+//        public MedicineSuggestionResponse getMedicineSuggestion(MedicineSuggestionRequest request);
 }

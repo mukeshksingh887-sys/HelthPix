@@ -16,7 +16,7 @@ import java.util.UUID;
 @Builder
 public class AppointmentResponse {
 
-    private Long id;
+    private Long appointmentId;
     private Long patientId;
     private Long doctorId;
     private LocalDate appointmentDate;
@@ -25,4 +25,8 @@ public class AppointmentResponse {
     private AppointmentStatus status;
     private String reason;
     private String notes;
+
+    private PatientResponse patient;
+
+    private DoctorResponse doctor;
 }

@@ -1,4 +1,4 @@
-package com.doctor_service.dto;
+package com.Patient_service.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

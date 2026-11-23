@@ -5,6 +5,7 @@ import com.Patient_service.dto.PatientRequest;
 import com.Patient_service.dto.PatientResponse;
 import com.Patient_service.service.PatientService;
 import com.Patient_service.entity.PatientStatus;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,11 +21,13 @@ public class PatientController {
 
 
     @Autowired
-  private   PatientService patientService;
-//        @GetMapping("check")
-//     public  String check(){
-//         return " server from patient service";
-//     }
+    private PatientService patientService;
+
+
+    @GetMapping("/check")
+    public String check() {
+        return " server from patient service";
+    }
 
     @PostMapping("/create")
     public ResponseEntity<PatientResponse> createPatient(
@@ -34,6 +37,7 @@ public class PatientController {
                 .status(HttpStatus.CREATED)
                 .body(patientService.createPatient(request));
     }
+
 
 
     @GetMapping("/get/{id}")
@@ -53,27 +57,27 @@ public class PatientController {
         );
     }
 
-
-    @PutMapping("/{id}")
-    public ResponseEntity<PatientResponse> updatePatient(
-            @PathVariable Long id,
-            @RequestBody PatientRequest request) {
-
-        return ResponseEntity.ok(
-                patientService.updatePatient(id, request)
-        );
-    }
-
-
-    @PatchMapping("update/{id}")
-    public ResponseEntity<PatientResponse> patchPatient(
-            @PathVariable Long id,
-            @RequestBody PatientRequest request) {
-
-        return ResponseEntity.ok(patientService.PartialPatientUpdate(id, request));
-    }
-
-
+//
+//    @PutMapping("/{id}")
+//    public ResponseEntity<PatientResponse> updatePatient(
+//            @PathVariable Long id,
+//            @RequestBody PatientRequest request) {
+//
+//        return ResponseEntity.ok(
+//                patientService.updatePatient(id, request)
+//        );
+//    }
+//
+//
+//    @PatchMapping("update/{id}")
+//    public ResponseEntity<PatientResponse1> patchPatient(
+//            @PathVariable Long id,
+//            @RequestBody PatientRequest request) {
+//
+//        return ResponseEntity.ok(patientService.PartialPatientUpdate(id, request));
+//    }
+//
+//
     @DeleteMapping("delete/{id}")
     public ResponseEntity<PatientResponse> deletePatient(
             @PathVariable Long id) {
@@ -82,64 +86,64 @@ public class PatientController {
 
         return ResponseEntity.ok(patientService.deletePatient(id));
     }
-
-//    // UPDATE STATUS
-    @PatchMapping("/Status/{id}")
-    public ResponseEntity<PatientResponse> updateStatus(
-            @PathVariable Long id,
-            @RequestParam PatientStatus status) {
-
-        return ResponseEntity.ok(
-                patientService.updateStatus(id, status)
-        );
-    }
-
-    @PatchMapping("update/{id}/status")
-    public ResponseEntity<PatientResponse> updateStatus(
-            @PathVariable Long id,
-            @RequestBody PatientRequest request) {
-
-        return ResponseEntity.ok(
-                patientService.updateStatus(id, PatientStatus.valueOf(request.getStatus()))
-        );
-    }
-
-
-    @GetMapping("get/status")
-    public ResponseEntity<List<PatientResponse>> getPatientsByStatus(
-            @RequestParam String status) {
-
-        return ResponseEntity.ok(
-                patientService.getPatientsByStatus(status)
-        );
-    }
-
-
-
-    // SEARCH
-    @GetMapping("/search")
-    public ResponseEntity<List<PatientResponse>> searchPatients(
-            @RequestParam String keyword) {
-
-        List<PatientResponse> patients =
-                patientService.searchPatients(keyword);
-
-        return ResponseEntity.ok(patients);
-    }
-
-
-    @GetMapping("/blood-group/{bloodGroup}")
-    public List<PatientResponse> getPatientsByBloodGroup(
-            @PathVariable String bloodGroup) {
-
-        return patientService.getPatientsByBloodGroup(bloodGroup);
-    }
-
-
-    @GetMapping("/count")
-    public Long countPatients() {
-        return patientService.countPatients();
-    }
+//
+////    // UPDATE STATUS
+//    @PatchMapping("/Status/{id}")
+//    public ResponseEntity<PatientResponse1> updateStatus(
+//            @PathVariable Long id,
+//            @RequestParam PatientStatus status) {
+//
+//        return ResponseEntity.ok(
+//                patientService.updateStatus(id, status)
+//        );
+//    }
+//
+//    @PatchMapping("update/{id}/status")
+//    public ResponseEntity<PatientResponse1> updateStatus(
+//            @PathVariable Long id,
+//            @RequestBody PatientRequest request) {
+//
+//        return ResponseEntity.ok(
+//                patientService.updateStatus(id, PatientStatus.valueOf(request.getStatus()))
+//        );
+//    }
+//
+//
+//    @GetMapping("get/status")
+//    public ResponseEntity<List<PatientResponse1>> getPatientsByStatus(
+//            @RequestParam String status) {
+//
+//        return ResponseEntity.ok(
+//                patientService.getPatientsByStatus(status)
+//        );
+//    }
+//
+//
+//
+//    // SEARCH
+//    @GetMapping("/search")
+//    public ResponseEntity<List<PatientResponse1>> searchPatients(
+//            @RequestParam String keyword) {
+//
+//        List<PatientResponse1> patients =
+//                patientService.searchPatients(keyword);
+//
+//        return ResponseEntity.ok(patients);
+//    }
+//
+//
+//    @GetMapping("/blood-group/{bloodGroup}")
+//    public List<PatientResponse1> getPatientsByBloodGroup(
+//            @PathVariable String bloodGroup) {
+//
+//        return patientService.getPatientsByBloodGroup(bloodGroup);
+//    }
+//
+//
+//    @GetMapping("/count")
+//    public Long countPatients() {
+//        return patientService.countPatients();
+//    }
 
 //    @PreAuthorize("hasRole('DOCTOR')")
 //    @PostMapping("/medicine-suggestion")

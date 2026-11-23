@@ -5,6 +5,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
@@ -14,14 +15,11 @@ public class JwtService {
 
     private static final String SECRET_KEY = "mySuperSecretJwtKeyForHospitalManagementSystem2026";
 
-//    private Key getKey() {
-//        return Keys.hmacShaKeyFor(
-//                SECRET_KEY.getBytes(StandardCharsets.UTF_8));
-//    }
-
-    private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+    private SecretKey getKey() {
+        return Keys.hmacShaKeyFor(
+                SECRET_KEY.getBytes(StandardCharsets.UTF_8));
     }
+
 
     // Access Token (15 min)
     public String generateAccessToken(String userId, String email, String role) {
@@ -33,7 +31,7 @@ public class JwtService {
                 .claim("email",email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -46,14 +44,14 @@ public class JwtService {
                 .claim("email",email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 7))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
     // Extract Username
     public String extractUsername(String token) {
 
         Claims claims = Jwts.parser()
-                .setSigningKey(getSigningKey())
+                .setSigningKey(getKey())
                 .parseClaimsJws(token)
                 .getBody();
 
@@ -76,14 +74,8 @@ public class JwtService {
 
 
     public Claims extractClaims(String token) {
-//        return Jwts.parser()
-//                .verifyWith((SecretKey) getKey())
-//                .build()
-//                .parseSignedClaims(token)
-//                .getPayload();
-
         Claims claims = Jwts.parser()
-                .setSigningKey(getSigningKey())
+                .setSigningKey(getKey())
                 .parseClaimsJws(token)
                 .getBody();
         return  claims;

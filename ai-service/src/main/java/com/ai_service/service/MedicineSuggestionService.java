@@ -120,16 +120,16 @@ public class MedicineSuggestionService {
                 %s
                 """.formatted(
 
-                request.patientId(),
-                request.age(),
-                request.gender(),
-                request.weightKg(),
-                request.symptoms(),
-                request.allergies(),
-                request.currentMedications(),
-                request.existingConditions(),
-                request.medicalHistory(),
-                request.labReports()
+                request.getPatientId(),
+                request.getAge(),
+                request.getGender(),
+                request.getWeightKg(),
+                request.getSymptoms(),
+                request.getAllergies(),
+                request.getCurrentMedications(),
+                request.getExistingConditions(),
+                request.getMedicalHistory(),
+                request.getLabReports()
         );
     }
 }

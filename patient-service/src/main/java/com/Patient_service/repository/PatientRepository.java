@@ -13,22 +13,24 @@ import java.util.Optional;
 @Repository
 @EnableJpaRepositories
 public interface PatientRepository extends JpaRepository<Patient,Long> {
-    Optional<Patient> findByEmail(String email);
-
-    Optional<Patient> findByPhone(String phone);
-
-    boolean existsByEmail(String email);
-
-    boolean existsByPhone(String phone);
-
-    List<Patient> findByStatus(PatientStatus status);
-
-    List<Patient> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
-            String firstName,
-            String lastName
-    );
-
-    List<Patient> findByBloodGroup(String bloodGroup);
+//    Optional<Patient> findByEmail(String email);
+//
+//    Optional<Patient> findByPhone(String phone);
+//
+//    boolean existsByEmail(String email);
+//
+//    boolean existsByPhone(String phone);
+//
+//    List<Patient> findByStatus(PatientStatus status);
+//
+//    List<Patient> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
+//            String firstName,
+//            String lastName
+//    );
+//
+//    List<Patient> findByBloodGroup(String bloodGroup);
+//
+//    boolean existsByUserId(Long userId);
 
 
 //    @Query("""
@@ -41,4 +43,10 @@ public interface PatientRepository extends JpaRepository<Patient,Long> {
 //    List<Patient> searchPatients(String keyword);
 
 
+    Optional<Patient> findByPatientCode(String patientCode);
+
+    Optional<Patient> findByUserId(Long userId);
+
+
+    boolean existsByUserId(Long userId);
 }

@@ -3,8 +3,9 @@ package com.Patient_service.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long patientId;
 
     @Column(unique = true, nullable = false)
     private String patientCode;
@@ -23,33 +24,21 @@ public class Patient {
     @Column(nullable = false)
     private Long userId;
 
-    @Column(nullable = false)
-    private String firstName;
+    @OneToMany(
+            mappedBy = "patient",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @Builder.Default
+    private List<MedicalHistory> medicalHistory = new ArrayList<>();
 
-    @Column(nullable = false)
-    private String lastName;
-
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(nullable = false, unique = true)
-    private String phone;
-
-    private LocalDate dateOfBirth;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Gender gender;
-
-    private String bloodGroup;
-
-    private String address;
-
-    private String emergencyContact;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private PatientStatus status;
+    @OneToMany(
+            mappedBy = "patient",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @Builder.Default
+    private List<AppointmentHistory> appointmentHistory = new ArrayList<>();
 
     private LocalDateTime createdAt;
 
@@ -64,6 +53,31 @@ public class Patient {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
+    }
+
+
+    public void addMedicalHistory(MedicalHistory history) {
+
+        if (medicalHistory == null) {
+            medicalHistory = new ArrayList<>();
+        }
+
+        medicalHistory.add(history);
+
+        history.setPatient(this);
+    }
+
+    public void addAppointmentHistory(
+            AppointmentHistory appointment) {
+
+
+        if (appointmentHistory == null) {
+            appointmentHistory = new ArrayList<>();
+        }
+
+        appointmentHistory.add(appointment);
+
+        appointment.setPatient(this);
     }
 
 }

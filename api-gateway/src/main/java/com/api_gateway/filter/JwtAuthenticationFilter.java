@@ -1,13 +1,15 @@
 package com.api_gateway.filter;
 
+import com.api_gateway.exception.InvalidTokenException;
+import com.api_gateway.exception.TokenExpiredException;
+import com.api_gateway.exception.UnauthorizedException;
 import com.api_gateway.util.JwtService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.gateway.filter.GatewayFilter;
-import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -15,172 +17,26 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
-
-//@Component
-//@RequiredArgsConstructor
-//public class JwtAuthorizationFilter
-//        implements GlobalFilter {
-//
-//    private final JwtService jwtService;
-//
-//    @Override
-//    public Mono<Void> filter(
-//            ServerWebExchange exchange,
-//            org.springframework.cloud.gateway.filter.GatewayFilterChain chain) {
-//
-//        String path = exchange.getRequest()
-//                .getURI()
-//                .getPath();
-//
-//        // Public API
-//        if (path.startsWith("/auth/")) {
-//            return chain.filter(exchange);
-//        }
-//
-//        String authorization =
-//                exchange.getRequest()
-//                        .getHeaders()
-//                        .getFirst(HttpHeaders.AUTHORIZATION);
-//
-//        // JWT missing
-//        if (authorization == null
-//                || !authorization.startsWith("Bearer ")) {
-//
-//            return unauthorized(exchange);
-//        }
-//
-//        String token =
-//                authorization.substring(7);
-//
-//
-//
-//        // JWT invalid
-//        if (!jwtService.validateToken(token)) {
-//
-//            return unauthorized(exchange);
-//        }
-//
-//
-//
-//        Claims claims =
-//                jwtService.extractClaims(token);
-//
-//        String username =
-//                claims.getSubject();
-//
-//        List<String> roles =
-//                claims.get("role", List.class);
-//
-//        // Authorization
-//        if (!hasPermission(path, roles)) {
-//
-//            return forbidden(exchange);
-//        }
-//
-//        // Forward authenticated user information
-//        ServerHttpRequest request =
-//                exchange.getRequest()
-//                        .mutate()
-//                        .header("X-User", username)
-//                        .header(
-//                                "X-Roles",
-//                                String.join(",", roles))
-//                        .build();
-//
-//        return chain.filter(
-//                exchange.mutate()
-//                        .request(request)
-//                        .build()
-//        );
-//    }
-//
-//    private boolean hasPermission(
-//            String path,
-//            List<String> roles) {
-//
-//        if (path.startsWith("/api/admin/")) {
-//
-//            return roles.contains("ADMIN");
-//        }
-//
-//        if (path.startsWith("/api/doctors/")) {
-//
-//            return roles.contains("DOCTOR")
-//                    || roles.contains("ADMIN");
-//        }
-//
-//        if (path.startsWith("/api/patients/")) {
-//
-//            return roles.contains("PATIENT")
-//                    || roles.contains("DOCTOR")
-//                    || roles.contains("ADMIN");
-//        }
-//
-//        if (path.startsWith("/api/appointments/")) {
-//
-//            return roles.contains("PATIENT")
-//                    || roles.contains("DOCTOR")
-//                    || roles.contains("ADMIN");
-//        }
-//
-//        return true;
-//    }
-//
-//    private Mono<Void> unauthorized(
-//            ServerWebExchange exchange) {
-//
-//        exchange.getResponse()
-//                .setStatusCode(
-//                        HttpStatus.UNAUTHORIZED);
-//
-//        return exchange.getResponse()
-//                .setComplete();
-//    }
-//
-//    private Mono<Void> forbidden(
-//            ServerWebExchange exchange) {
-//
-//        exchange.getResponse()
-//                .setStatusCode(
-//                        HttpStatus.FORBIDDEN);
-//
-//        return exchange.getResponse()
-//                .setComplete();
-//    }
-//}
-
-
-
-
-
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class JwtAuthenticationFilter implements GatewayFilter {
+public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
 
-    @Autowired
-    private  JwtService jwtService;
-
-    private static final List<String> PUBLIC_URLS = List.of(
-            "/api/auth/login",
-            "/api/auth/refresh-token",
-            "/api/auth/forgot-password",
-            "/api/auth/reset-password"
-//            "/api/user/getAll"
-    );
+    private final JwtService jwtService;
 
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+    public Mono<Void> filter(
+            ServerWebExchange exchange,
+            GatewayFilterChain chain) {
 
         String path = exchange.getRequest().getURI().getPath();
 
-        boolean isPublic = PUBLIC_URLS.stream().anyMatch(path::startsWith);
-
-        if (isPublic) {
+        if (path.startsWith("/api/auth/")) {
             return chain.filter(exchange);
+        }
+
+        if(path.startsWith("/api/users/create")){
+            return  chain.filter(exchange);
         }
 
         String authHeader =
@@ -188,49 +44,78 @@ public class JwtAuthenticationFilter implements GatewayFilter {
                         .getHeaders()
                         .getFirst(HttpHeaders.AUTHORIZATION);
 
-        log.info(" auth header :  -----  {}",authHeader);
+        log.info("auth herader :::: {}",authHeader);
 
-        if (authHeader == null ||
-                !authHeader.startsWith("Bearer ")) {
+//        if (authHeader == null ||
+//                !authHeader.startsWith("Bearer ")) {
+//
+//            exchange.getResponse()
+//                    .setStatusCode(HttpStatus.UNAUTHORIZED);
+//
+//            return exchange.getResponse().setComplete();
+//        }
 
-            exchange.getResponse()
-                    .setStatusCode(HttpStatus.UNAUTHORIZED);
-
-            return exchange.getResponse().setComplete();
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new UnauthorizedException(
+                    "Authorization header is missing"
+            );
         }
-
         String token = authHeader.substring(7);
-        log.info(" auth token :  -----  {}",token);
+
+
+
+//        if (!jwtService.validateToken(token)) {
+//
+//            exchange.getResponse()
+//                    .setStatusCode(HttpStatus.UNAUTHORIZED);
+//
+//            return exchange.getResponse().setComplete();
+//        }
+
 
         if (!jwtService.validateToken(token)) {
-
-            exchange.getResponse()
-                    .setStatusCode(HttpStatus.UNAUTHORIZED);
-
-            return exchange.getResponse().setComplete();
+            throw new InvalidTokenException(
+                    "Invalid JWT Token"
+            );
         }
 
-        Claims claims = jwtService.extractClaims(token);
+        if (jwtService.isTokenExpired(token)) {
+            throw new TokenExpiredException(
+                    "JWT Token has expired"
+            );
+        }
 
-        log.info(" auth climes  :  -----  {}",claims);
 
-        String userId = claims.get("userId").toString();
+        Claims claims =
+                jwtService.extractClaims(token);
+        log.info(" climes :::::{}",claims);
 
-        String email = claims.get("email").toString();
+        String userId =
+                String.valueOf(claims.get("userId"));
 
-        String role = claims.get("role").toString();
+        String role =
+                String.valueOf(claims.get("role"));
 
-        ServerWebExchange modifiedExchange =
-                exchange.mutate()
-                        .request(r -> r.headers(headers -> {
-                            headers.add("X-USER-ID", userId);
-                            headers.add("X-EMAIL", email);
-                            headers.add("X-ROLE", role);
-                        }))
+        String email =
+                String.valueOf(claims.get("email"));
+
+        ServerHttpRequest request =
+                exchange.getRequest()
+                        .mutate()
+                        .header("X-USER-ID", userId)
+                        .header("X-ROLE", role)
+                        .header("X-EMAIL", email)
                         .build();
 
-        return chain.filter(modifiedExchange);
+        return chain.filter(
+                exchange.mutate()
+                        .request(request)
+                        .build()
+        );
     }
 
-
+    @Override
+    public int getOrder() {
+        return -1;
+    }
 }

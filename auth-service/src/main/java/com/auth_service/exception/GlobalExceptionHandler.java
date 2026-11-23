@@ -63,4 +63,18 @@ public class GlobalExceptionHandler {
     }
 
 
+
+    @ExceptionHandler( TokenExpireException.class)
+    public ResponseEntity<?>  TokenExpireExceptionHadler(ResourceNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(
+                        Map.of(
+                                "timestamp", LocalDateTime.now(),
+                                "status", 401,
+                                "message", ex.getMessage()
+                        )
+                );
+    }
+
+
 }

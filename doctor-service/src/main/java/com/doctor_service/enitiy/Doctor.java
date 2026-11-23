@@ -53,4 +53,5 @@ public class Doctor {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private DoctorStatus status;
+
 }

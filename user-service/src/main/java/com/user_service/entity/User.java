@@ -49,10 +49,8 @@ public class User {
     @Column(nullable = false)
     private UserType role;
 
-
     @Enumerated(EnumType.STRING)
     private UserStatus status;
-
 
     private  String address;
 

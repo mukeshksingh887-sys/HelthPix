@@ -1,10 +1,8 @@
 package com.Patient_service.controller;
 
 
-import com.Patient_service.dto.PatientResponse;
 import com.Patient_service.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,16 +21,16 @@ public class PatientInternalController {
 //        return patientService.getPatientByEmail(email);
 //    }
 //   /internal/patients/{patientId}
-    @GetMapping("/{patientId}")
-    public  PatientResponse getById(@PathVariable("patientId") Long id){
-        return patientService.getPatientById(id);
-    }
-
-
-    @GetMapping("/count")
-    public long countPatients() {
-
-        return patientService.countPatients();
-    }
+//    @GetMapping("/{patientId}")
+//    public PatientResponse1 getById(@PathVariable("patientId") Long id){
+//        return patientService.getPatientById(id);
+//    }
+//
+//
+//    @GetMapping("/count")
+//    public long countPatients() {
+//
+//        return patientService.countPatients();
+//    }
 
 }

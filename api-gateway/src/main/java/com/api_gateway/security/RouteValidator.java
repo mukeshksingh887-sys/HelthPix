@@ -1,10 +1,12 @@
 package com.api_gateway.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class RouteValidator {
 
     public static final List<String> openApiEndpoints =

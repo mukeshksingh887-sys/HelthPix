@@ -7,6 +7,7 @@ import com.auth_service.entity.OtpVerification;
 import com.auth_service.entity.RefreshToken;
 import com.auth_service.exception.BadCredentialsException;
 import com.auth_service.exception.ResourceNotFoundException;
+import com.auth_service.exception.TokenExpireException;
 import com.auth_service.repository.AuthUserRepository;
 import com.auth_service.repository.OtpVerificationRepository;
 import com.auth_service.repository.RefreshTokenRepository;
@@ -79,7 +80,7 @@ public class AuthServiceImp implements  AuthService {
     @Override
     public LoginResponse login(LoginRequest request) {
 
-        AuthUser authUser = authRepository.findByEmail(request.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+        AuthUser authUser = authRepository.findByEmail(request.getEmail()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
 
         log.info("password: {} ", request.getPassword());
@@ -144,13 +145,13 @@ public class AuthServiceImp implements  AuthService {
                 refreshRepository.findByToken(
                                 request.getRefreshToken())
                         .orElseThrow(() ->
-                                new RuntimeException(
+                                new TokenExpireException(
                                         "Invalid Refresh Token"));
 
         if (storedToken.getExpiryDate()
                 .isBefore(LocalDateTime.now())) {
 
-            throw new RuntimeException(
+            throw new TokenExpireException(
                     "Refresh Token Expired");
         }
 

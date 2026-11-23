@@ -36,6 +36,18 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+    @ExceptionHandler(AlreadyExist.class)
+    public ResponseEntity<?> handleAlreadyExistException(
+            AlreadyExist ex) {
+
+        return ResponseEntity
+                .badRequest()
+                .body(Map.of(
+                        "message", ex.getMessage(),
+                        "timestamp", LocalDateTime.now()
+                ));
+    }
+
     @ExceptionHandler(UserNotFounException.class)
     public ResponseEntity<?> handleUserNotFound(
             UserNotFounException ex) {

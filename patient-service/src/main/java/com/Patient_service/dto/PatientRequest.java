@@ -1,10 +1,12 @@
 package com.Patient_service.dto;
 
+import com.Patient_service.entity.AppointmentHistory;
 import lombok.*;
 import org.hibernate.annotations.processing.Pattern;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Getter
@@ -14,19 +16,9 @@ import java.time.LocalDateTime;
 @Builder
 @Data
 public class PatientRequest {
-
-    private String firstName;
-    private String lastName;
-    private String email;
     private Long userId;
-    private String phone;
-    private LocalDate dateOfBirth;
-    private String gender;
-    private String bloodGroup;
-    private String address;
-    private String emergencyContact;
-    private String status;
-    private LocalDateTime createdAt;
 
-    private  LocalDateTime updatedAt;
+    private List<MedicalHistoryRequest> medicalHistories;
+
+    private  List<AppointmentHistory>  appointmentHistories;
 }

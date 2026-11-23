@@ -3,13 +3,17 @@ package com.doctor_service.controller;
 import com.doctor_service.dto.CreateDoctorRequest;
 import com.doctor_service.dto.DoctorResponse;
 import com.doctor_service.enitiy.DoctorStatus;
+import com.doctor_service.security.UserPrincipal;
 import com.doctor_service.service.DoctorService;
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -23,9 +27,18 @@ public class DoctorController {
     @Autowired
     private DoctorService doctorService;
 
+
+    @GetMapping("/public")
+    public ResponseEntity< String> get(){
+
+         return  ResponseEntity.ok().body(" i am for doctor public api ");
+
+    }
+
     /**
      * Create Doctor
      */
+    @PreAuthorize("hasRole('DOCTOR')")
     @PostMapping("/create")
     public ResponseEntity<DoctorResponse> createDoctor(
             @Valid @RequestBody CreateDoctorRequest request) {
@@ -41,7 +54,7 @@ public class DoctorController {
     /**
      * Get Doctor By Doctor Id
      */
-    @GetMapping("get/{doctorId}")
+    @GetMapping("/public/get/{doctorId}")
     public ResponseEntity<DoctorResponse> getDoctorById(
             @PathVariable Long doctorId) {
 
@@ -53,7 +66,7 @@ public class DoctorController {
     /**
      * Get Doctor By User Id
      */
-    @GetMapping("/userbyuser/{userId}")
+    @GetMapping("/public/userbyuser/{userId}")
     public ResponseEntity<DoctorResponse> getDoctorByUserId(
             @PathVariable Long userId) {
 
@@ -65,7 +78,7 @@ public class DoctorController {
     /**
      * Get All Doctors
      */
-    @GetMapping("/getAllDoctor")
+    @GetMapping("/public/getAllDoctor")
     public ResponseEntity<List<DoctorResponse>> getAllDoctors() {
 
         return ResponseEntity.ok(
@@ -76,7 +89,7 @@ public class DoctorController {
     /**
      * Update Doctor
      */
-//    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     @PutMapping("update/{doctorId}")
     public ResponseEntity<DoctorResponse> updateDoctor(
             @PathVariable Long doctorId,
@@ -93,7 +106,7 @@ public class DoctorController {
     /**
      * Delete Doctor by doctorId
      */
-//    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
+  @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     @DeleteMapping("delete/{doctorId}")
     public ResponseEntity<String> deleteDoctor(
             @PathVariable Long doctorId) {
@@ -106,7 +119,8 @@ public class DoctorController {
     }
 
 
-
+// change doctor status
+@PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     @PutMapping("/{doctorId}/status")
     public ResponseEntity<DoctorResponse>
     updateDoctorStatus(
@@ -120,7 +134,7 @@ public class DoctorController {
     }
 
 
-//    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     @PutMapping("/{doctorId}/consultation-fee")
     public ResponseEntity<DoctorResponse>
     updateConsultationFee(
@@ -134,6 +148,8 @@ public class DoctorController {
     }
 
 
+    // change Specilazation
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     @GetMapping("/search/specialization")
     public ResponseEntity<List<DoctorResponse>>
     getDoctorsBySpecialization(
@@ -145,7 +161,8 @@ public class DoctorController {
                                 value));
     }
 
-
+// change Exprience years
+    @PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
     @GetMapping("/experience/{years}")
     public ResponseEntity<List<DoctorResponse>> getDoctorsByExperience(
             @PathVariable Integer years) {
@@ -155,8 +172,8 @@ public class DoctorController {
         );
     }
 
-
-    @GetMapping("/fee-range")
+   // get doctor by fee range
+    @GetMapping("/public/fee-range")
     public List<DoctorResponse> getDoctorsByFeeRange(
             @RequestParam BigDecimal min,
             @RequestParam BigDecimal max) {
@@ -166,6 +183,29 @@ public class DoctorController {
     }
 
 
+
+
+
+    @GetMapping("/me")
+    public UserPrincipal currentUser(
+            @AuthenticationPrincipal
+            UserPrincipal user) {
+
+        return user;
+    }
+
+    @PostMapping("/loged/create")
+    @PreAuthorize("hasRole('ADMIN','DOCTOR')")
+    public DoctorResponse createDoctor(
+            @RequestBody CreateDoctorRequest request,
+            @AuthenticationPrincipal UserPrincipal currentUser) {
+
+        System.out.println(currentUser.getUserId());
+        System.out.println(currentUser.getEmail());
+        System.out.println(currentUser.getRole());
+
+        return doctorService.createDoctor(request);
+    }
 
 //    @PreAuthorize("hasRole('DOCTOR')")
 //    @PostMapping("/medicine-suggestion")

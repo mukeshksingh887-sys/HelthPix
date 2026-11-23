@@ -46,7 +46,7 @@ public class AppointmentController {
 
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<List<AppointmentResponse>>
-    getByPatient(
+    getByPatientId(
             @PathVariable Long patientId) {
 
         return ResponseEntity.ok(

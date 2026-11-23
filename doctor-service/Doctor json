@@ -1,0 +1,47 @@
+[
+  {
+    "userId": 101,
+    "specialization": "Cardiology",
+    "qualification": "MBBS, MD Cardiology",
+    "experienceYears": 12,
+    "consultationFee": 1200.00,
+    "department": "Cardiology",
+    "licenseNumber": "KAR-CARD-1001"
+  },
+  {
+    "userId": 102,
+    "specialization": "Neurology",
+    "qualification": "MBBS, MD Neurology",
+    "experienceYears": 8,
+    "consultationFee": 1000.00,
+    "department": "Neurology",
+    "licenseNumber": "KAR-NEUR-1002"
+  },
+  {
+    "userId": 103,
+    "specialization": "Dermatology",
+    "qualification": "MBBS, MD Dermatology",
+    "experienceYears": 6,
+    "consultationFee": 800.00,
+    "department": "Dermatology",
+    "licenseNumber": "KAR-DERM-1003"
+  },
+  {
+    "userId": 104,
+    "specialization": "Orthopedics",
+    "qualification": "MBBS, MS Orthopedics",
+    "experienceYears": 10,
+    "consultationFee": 900.00,
+    "department": "Orthopedics",
+    "licenseNumber": "KAR-ORTH-1004"
+  },
+  {
+    "userId": 105,
+    "specialization": "Pediatrics",
+    "qualification": "MBBS, MD Pediatrics",
+    "experienceYears": 7,
+    "consultationFee": 700.00,
+    "department": "Pediatrics",
+    "licenseNumber": "KAR-PED-1005"
+  }
+]

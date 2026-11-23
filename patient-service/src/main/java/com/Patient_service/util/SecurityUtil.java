@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class SecurityUtils {
+public class SecurityUtil {
 
     private final HttpServletRequest request;
 

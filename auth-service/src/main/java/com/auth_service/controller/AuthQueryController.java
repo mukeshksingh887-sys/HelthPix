@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class AuthQueryController {
+public class  AuthQueryController {
 
     private final AuthQueryService authQueryService;
 

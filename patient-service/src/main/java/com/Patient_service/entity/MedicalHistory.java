@@ -17,23 +17,32 @@ public class MedicalHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long medicalHistoryId;
 
-    // Patient Reference
-    @Column(nullable = false)
-    private Long patientId;
+//    // Patient Reference
+//    @Column(nullable = false)
+//    private Long patientId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_id", nullable = false)
+    private Patient patient;
+
 
     // Disease / Diagnosis
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String diagnosis;
 
     // Symptoms
     @Column(length = 1000)
-    private String symptoms;
+    private String disease;
 
     // Treatment Details
     @Column(length = 2000)
     private String treatment;
+
+    private  String surgeryDetails;
+
+    private  String doctorNotes;
 
     // Prescribed Medicines
     @Column(length = 2000)
@@ -50,7 +59,7 @@ public class MedicalHistory {
     private LocalDate recoveryDate;
 
     // Additional Notes
-    @Column(length = 2000)
+//    @Column(length = 2000)
     private String notes;
 
 //    @Enumerated(EnumType.STRING)
